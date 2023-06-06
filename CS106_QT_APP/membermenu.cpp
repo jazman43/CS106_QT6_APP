@@ -1,0 +1,14 @@
+#include "membermenu.h"
+#include "ui_membermenu.h"
+
+memberMenu::memberMenu(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::memberMenu)
+{
+    ui->setupUi(this);
+}
+
+memberMenu::~memberMenu()
+{
+    delete ui;
+}

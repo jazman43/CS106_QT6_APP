@@ -3,19 +3,36 @@
 
 #include <QMainWindow>
 
-QT_BEGIN_NAMESPACE
+
+
+
+
 namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void onAdminWindowHidden();
+
+private slots:
+
+
+    void on_add_modify_delete_users_clicked();
+
+    void on_pushButton_books_clicked();
 
 private:
     Ui::MainWindow *ui;
+
+
+
+signals:
+    void adminWindowHidden();
 };
 #endif // MAINWINDOW_H

@@ -14,9 +14,42 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
+        loginwindow.cpp
+        loginwindow.h
+        loginwindow.ui
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        filemanagement.cpp
+        filemanagement.h
+        userdata.cpp
+        userdata.h
+        userdata.ui
+        newuser.cpp
+        newuser.h
+        newuser.ui
+        edituser.cpp
+        edituser.h
+        edituser.ui
+        deleteusers.cpp
+        deleteusers.h
+        deleteusers.ui
+        bookdata.cpp
+        bookdata.h
+        bookdata.ui
+        newbook.cpp
+        newbook.h
+        newbook.ui
+        editbooks.cpp
+        editbooks.h
+        editbooks.ui
+        deletebooks.cpp
+        deletebooks.h
+        deletebooks.ui
+        membermenu.cpp
+        membermenu.h
+        membermenu.ui
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
