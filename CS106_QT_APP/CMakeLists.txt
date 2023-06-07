@@ -16,6 +16,7 @@ include_directories(
 
     UI_files/
     H_files/
+    H_files/Utils
 )
 
 set(PROJECT_SOURCES
@@ -32,18 +33,20 @@ set(PROJECT_SOURCES
         editbooks.cpp               
         deletebooks.cpp                
         membermenu.cpp
-        H_files/mainwindow.h
-        H_files/loginwindow.h
+        H_files/Utils/filemanagement.h
+        H_files/Utils/mainwindow.h
+        H_files/Utils/loginwindow.h
+        H_files/Utils/membermenu.h
+
+        H_files/edituser.h        
         H_files/newuser.h
-        H_files/edituser.h
         H_files/deleteusers.h
         H_files/editbooks.h
         H_files/newbook.h
         H_files/bookdata.h
         H_files/deletebooks.h
-        H_files/membermenu.h
+
         H_files/userdata.h
-        H_files/filemanagement.h
         UI_files/membermenu.ui
         UI_files/loginwindow.ui
         UI_files/deletebooks.ui
