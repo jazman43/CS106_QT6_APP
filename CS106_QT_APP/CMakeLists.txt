@@ -1,0 +1,94 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(CS106_QT_APP VERSION 0.1 LANGUAGES CXX)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+
+set(PROJECT_SOURCES
+        main.cpp
+        loginwindow.cpp
+        loginwindow.h
+        loginwindow.ui
+        mainwindow.cpp
+        mainwindow.h
+        mainwindow.ui
+        filemanagement.cpp
+        filemanagement.h
+        userdata.cpp
+        userdata.h
+        userdata.ui
+        newuser.cpp
+        newuser.h
+        newuser.ui
+        edituser.cpp
+        edituser.h
+        edituser.ui
+        deleteusers.cpp
+        deleteusers.h
+        deleteusers.ui
+        bookdata.cpp
+        bookdata.h
+        bookdata.ui
+        newbook.cpp
+        newbook.h
+        newbook.ui
+        editbooks.cpp
+        editbooks.h
+        editbooks.ui
+        deletebooks.cpp
+        deletebooks.h
+        deletebooks.ui
+        membermenu.cpp
+        membermenu.h
+        membermenu.ui
+
+)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(CS106_QT_APP
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES}
+    )
+# Define target properties for Android with Qt 6 as:
+#    set_property(TARGET CS106_QT_APP APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+else()
+    if(ANDROID)
+        add_library(CS106_QT_APP SHARED
+            ${PROJECT_SOURCES}
+        )
+# Define properties for Android with Qt 5 after find_package() calls as:
+#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    else()
+        add_executable(CS106_QT_APP
+            ${PROJECT_SOURCES}
+        )
+    endif()
+endif()
+
+target_link_libraries(CS106_QT_APP PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
+set_target_properties(CS106_QT_APP PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
+install(TARGETS CS106_QT_APP
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(CS106_QT_APP)
+endif()
