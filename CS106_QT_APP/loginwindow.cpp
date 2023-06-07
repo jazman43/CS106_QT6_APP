@@ -1,7 +1,7 @@
-#include "loginwindow.h"
+#include "./H_files/loginwindow.h"
 #include "./UI_files/ui_loginwindow.h"
-#include "mainwindow.h"
-#include "membermenu.h"
+#include "./H_files/mainwindow.h"
+#include "./H_files/membermenu.h"
 #include <QMessageBox>
 
 

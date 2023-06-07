@@ -1,8 +1,8 @@
-#include "bookdata.h"
+#include "./H_files/bookdata.h"
 #include "./UI_files/ui_bookdata.h"
-#include "editbooks.h"
-#include "deletebooks.h"
-#include "mainwindow.h"
+#include "./H_files/editbooks.h"
+#include "./H_files/deletebooks.h"
+#include "./H_files/mainwindow.h"
 
 
 bookData::bookData(QWidget *parent) :

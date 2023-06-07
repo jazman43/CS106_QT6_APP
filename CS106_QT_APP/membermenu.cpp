@@ -1,4 +1,4 @@
-#include "membermenu.h"
+#include "./H_files/membermenu.h"
 #include "./UI_files/ui_membermenu.h"
 
 memberMenu::memberMenu(QWidget *parent) :

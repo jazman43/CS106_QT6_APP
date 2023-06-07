@@ -1,4 +1,4 @@
-#include "deletebooks.h"
+#include "./H_files/deletebooks.h"
 #include "./UI_files/ui_deletebooks.h"
 
 deleteBooks::deleteBooks(QWidget *parent) :

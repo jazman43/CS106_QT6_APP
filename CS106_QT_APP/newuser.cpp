@@ -1,6 +1,6 @@
-#include "newuser.h"
+#include "./H_files/newuser.h"
 #include "./UI_files/ui_newuser.h"
-#include "filemanagement.h"
+#include "./H_files/filemanagement.h"
 
 newUser::newUser(QWidget *parent) :
     QDialog(parent),

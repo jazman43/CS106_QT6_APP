@@ -1,4 +1,4 @@
-#include "deleteusers.h"
+#include "./H_files/deleteusers.h"
 #include "./UI_files/ui_deleteusers.h"
 
 deleteUsers::deleteUsers(QWidget *parent) :

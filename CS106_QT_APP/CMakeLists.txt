@@ -15,34 +15,35 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 include_directories(
 
     UI_files/
+    H_files/
 )
 
 set(PROJECT_SOURCES
         main.cpp
-        loginwindow.cpp
-        loginwindow.h
-        mainwindow.cpp
-        mainwindow.h
+        loginwindow.cpp        
+        mainwindow.cpp        
         filemanagement.cpp
-        filemanagement.h
         userdata.cpp
-        userdata.h
-        newuser.cpp
-        newuser.h
-        edituser.cpp
-        edituser.h
-        deleteusers.cpp
-        deleteusers.h
-        bookdata.cpp
-        bookdata.h
-        newbook.cpp
-        newbook.h
-        editbooks.cpp
-        editbooks.h        
-        deletebooks.cpp
-        deletebooks.h        
+        newuser.cpp        
+        edituser.cpp        
+        deleteusers.cpp        
+        bookdata.cpp        
+        newbook.cpp        
+        editbooks.cpp               
+        deletebooks.cpp                
         membermenu.cpp
-        membermenu.h
+        H_files/mainwindow.h
+        H_files/loginwindow.h
+        H_files/newuser.h
+        H_files/edituser.h
+        H_files/deleteusers.h
+        H_files/editbooks.h
+        H_files/newbook.h
+        H_files/bookdata.h
+        H_files/deletebooks.h
+        H_files/membermenu.h
+        H_files/userdata.h
+        H_files/filemanagement.h
         UI_files/membermenu.ui
         UI_files/loginwindow.ui
         UI_files/deletebooks.ui
