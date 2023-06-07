@@ -1,5 +1,5 @@
-#include "editbooks.h"
-#include "ui_editbooks.h"
+#include "./H_files/editbooks.h"
+#include "./UI_files/ui_editbooks.h"
 
 
 editBooks::editBooks(QWidget *parent) :

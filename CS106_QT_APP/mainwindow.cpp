@@ -1,9 +1,9 @@
-#include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "./H_files/Utils/mainwindow.h"
+#include "./UI_files/ui_mainwindow.h"
 
 #include <QDebug>
-#include "userdata.h"
-#include "bookdata.h"
+#include "./H_files/userdata.h"
+#include "./H_files/bookdata.h"
 
 
 MainWindow::MainWindow(QWidget *parent)

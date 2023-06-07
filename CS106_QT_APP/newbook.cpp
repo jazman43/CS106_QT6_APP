@@ -1,6 +1,6 @@
-#include "newbook.h"
-#include "ui_newbook.h"
-#include "filemanagement.h"
+#include "./H_files/newbook.h"
+#include "./UI_files/ui_newbook.h"
+#include "./H_files/Utils/filemanagement.h"
 
 newBook::newBook(QWidget *parent) :
     QDialog(parent),

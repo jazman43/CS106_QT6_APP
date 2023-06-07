@@ -1,10 +1,10 @@
-#include "userdata.h"
-#include "ui_userdata.h"
-#include "newuser.h"
+#include "./H_files/userdata.h"
+#include "./UI_files/ui_userdata.h"
+#include "./H_files/newuser.h"
 #include <QMessageBox>
-#include "edituser.h"
-#include "deleteusers.h"
-#include "mainwindow.h"
+#include "./H_files/edituser.h"
+#include "./H_files/deleteusers.h"
+#include "./H_files/Utils/mainwindow.h"
 
 
 userData::userData(QWidget *parent) :

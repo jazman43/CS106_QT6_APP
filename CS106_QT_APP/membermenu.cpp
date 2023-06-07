@@ -1,5 +1,5 @@
-#include "membermenu.h"
-#include "ui_membermenu.h"
+#include "./H_files/Utils/membermenu.h"
+#include "./UI_files/ui_membermenu.h"
 
 memberMenu::memberMenu(QWidget *parent) :
     QMainWindow(parent),
