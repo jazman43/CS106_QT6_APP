@@ -1,5 +1,5 @@
 #include "newuser.h"
-#include "ui_newuser.h"
+#include "./UI_files/ui_newuser.h"
 #include "filemanagement.h"
 
 newUser::newUser(QWidget *parent) :

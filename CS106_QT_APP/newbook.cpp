@@ -1,5 +1,5 @@
 #include "newbook.h"
-#include "ui_newbook.h"
+#include "./UI_files/ui_newbook.h"
 #include "filemanagement.h"
 
 newBook::newBook(QWidget *parent) :

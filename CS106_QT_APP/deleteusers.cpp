@@ -1,5 +1,5 @@
 #include "deleteusers.h"
-#include "ui_deleteusers.h"
+#include "./UI_files/ui_deleteusers.h"
 
 deleteUsers::deleteUsers(QWidget *parent) :
     QDialog(parent),
