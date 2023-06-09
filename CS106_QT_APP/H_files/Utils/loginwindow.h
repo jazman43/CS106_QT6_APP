@@ -40,7 +40,7 @@ private:
 
     SignIn* signinWindow = new SignIn();
 
-
+    void defaultAdminUser();
 
 };
 

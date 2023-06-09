@@ -15,12 +15,7 @@ userData::userData(QWidget *parent) :
 
 
 
-    QJsonObject adminUser = filemanager.selectObjectByID(filemanager.filePathMemberData,1);
 
-    if(adminUser.empty())
-    {
-        defaultAdminUser();
-    }
 
     loadUserDataTable();
 
@@ -105,12 +100,7 @@ void userData::loadUserDataTable()
 
         QTableWidgetItem *item1 = new QTableWidgetItem(userName);
         QTableWidgetItem *item2 = new QTableWidgetItem(password);
-        if (userName == "Admin" && password == "Admin") {
 
-            item2->setBackground(Qt::yellow);
-
-            QMessageBox::warning(this, "Change Password", "Please change the default password for the admin user.");
-        }
 
         QTableWidgetItem *item3 = new QTableWidgetItem(isAdmin);
         QTableWidgetItem *item4 = new QTableWidgetItem(address);
@@ -134,23 +124,4 @@ void userData::loadUserDataTable()
 }
 
 
-void userData::defaultAdminUser()
-{
-    QJsonObject jsonNewUserObj;
 
-    jsonNewUserObj["userName"] = "Admin";
-    jsonNewUserObj["password"] = "Admin";
-    jsonNewUserObj["isAdmin"] = true;
-    jsonNewUserObj["address"] = "";
-    jsonNewUserObj["id"] = 1;
-    jsonNewUserObj["phoneNumber"] = "";
-    //defult velues
-    jsonNewUserObj["currentBooks"] = "no books";//will be changed with a custom arrary of books
-    jsonNewUserObj["over-dueBooks"] = "no over-due";
-
-
-    if(filemanager.writeToJson(filemanager.filePathMemberData ,jsonNewUserObj, 1))
-    {
-    }
-
-}
