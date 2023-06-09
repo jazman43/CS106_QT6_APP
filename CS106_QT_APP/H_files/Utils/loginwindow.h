@@ -2,9 +2,10 @@
 #define LOGINWINDOW_H
 
 #include <QMainWindow>
-#include <QComboBox>
+
 #include <QStackedWidget>
 #include "filemanagement.h"
+#include "signin.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -22,20 +23,25 @@ public:
     ~loginWindow();
 
     void login();
+    void loginCheck();
 
 private slots:
 
-    void on_stackedWidget_currentChanged(int arg1);
 
-
+    void on_pushButton_login_clicked();
 
 private:
     Ui::loginWindow *ui;
 
-    QComboBox* comboBox;
+
     QStackedWidget* stackedWidget;
 
     fileManagement files;
+
+    SignIn* signinWindow = new SignIn();
+
+
+
 };
 
 #endif // LOGINWINDOW_H
