@@ -2,6 +2,8 @@
 #define LOGINWINDOW_H
 
 #include <QMainWindow>
+#include <QComboBox>
+#include <QStackedWidget>
 #include "filemanagement.h"
 
 
@@ -19,11 +21,19 @@ public:
     loginWindow(QWidget *parent = nullptr);
     ~loginWindow();
 
+    void login();
+
 private slots:
-    void on_pushButton_login_clicked();
+
+    void on_stackedWidget_currentChanged(int arg1);
+
+
 
 private:
     Ui::loginWindow *ui;
+
+    QComboBox* comboBox;
+    QStackedWidget* stackedWidget;
 
     fileManagement files;
 };

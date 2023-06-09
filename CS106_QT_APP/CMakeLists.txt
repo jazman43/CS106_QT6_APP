@@ -33,6 +33,8 @@ set(PROJECT_SOURCES
         editbooks.cpp               
         deletebooks.cpp                
         membermenu.cpp
+        signin.cpp
+
         H_files/Utils/filemanagement.h
         H_files/Utils/mainwindow.h
         H_files/Utils/loginwindow.h
@@ -45,7 +47,7 @@ set(PROJECT_SOURCES
         H_files/newbook.h
         H_files/bookdata.h
         H_files/deletebooks.h
-
+        H_files/signin.h
         H_files/userdata.h
         UI_files/membermenu.ui
         UI_files/loginwindow.ui
@@ -58,6 +60,7 @@ set(PROJECT_SOURCES
         UI_files/newuser.ui
         UI_files/userdata.ui
         UI_files/mainwindow.ui
+        UI_files/signin.ui
 )
 
 

@@ -2,6 +2,7 @@
 #include "./UI_files/ui_loginwindow.h"
 #include "./H_files/Utils/mainwindow.h"
 #include "./H_files/Utils/membermenu.h"
+#include "H_files/signin.h"
 #include <QMessageBox>
 
 
@@ -10,6 +11,11 @@ loginWindow::loginWindow(QWidget *parent) :
     ui(new Ui::loginWindow)
 {
     ui->setupUi(this);
+
+    comboBox = findChild<QComboBox*>("comboBox_dropdown");
+    stackedWidget = findChild<QStackedWidget*>("stackedWidget");
+
+    connect(ui->pushButton_login, &QPushButton::clicked, this, &loginWindow::login);
 }
 
 loginWindow::~loginWindow()
@@ -17,7 +23,7 @@ loginWindow::~loginWindow()
     delete ui;
 }
 
-void loginWindow::on_pushButton_login_clicked()
+void loginWindow::login()
 {
     QString userName = ui->lineEdit_userName->text();
     QString password = ui->lineEdit_password->text();
@@ -45,17 +51,19 @@ void loginWindow::on_pushButton_login_clicked()
             //can log in
             if(isAdmin == "true")
             {
-                //is the admin
-                this->hide();
-                MainWindow* adminWindow = new MainWindow();
-                adminWindow->show();
+//              //is the admin
+//              this->hide();
+//              MainWindow* adminWindow = new MainWindow();
+//              adminWindow->show();
+//              break;
+                stackedWidget->setCurrentIndex(0); // Show the staff page
                 break;
+
+
             }else
             {
                 //user is not admin
-                this->hide();
-                memberMenu* usermenu = new memberMenu();
-                usermenu->show();
+                stackedWidget->setCurrentIndex(1);
                 break;
 
             }
@@ -65,5 +73,20 @@ void loginWindow::on_pushButton_login_clicked()
         }
 
     }
+}
+
+
+void loginWindow::on_stackedWidget_currentChanged(int arg1)
+{
+
+}
+
+
+
+
+void loginWindow::on_pushButton_login_clicked()
+{
+    SignIn* signinWindow = new SignIn();
+    signinWindow->show();
 }
 
