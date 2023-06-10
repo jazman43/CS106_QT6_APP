@@ -81,6 +81,7 @@ void SignIn::on_pushButton_staffSignin_clicked()
         staffLoggedOn = false;
 
         int IDSaved = object["id"].toInt();
+        QString userName =object["userName"].toString();
         QString passwordSaved = object["password"].toString();
         bool isAdmin = object["isAdmin"].toBool();
 
@@ -88,6 +89,9 @@ void SignIn::on_pushButton_staffSignin_clicked()
         {
             staffLoggedOn = true;
             userFound =true;
+            currentUserName = userName;
+            currentUserPass = passwordSaved;
+
             emit userChecked();
 
 
@@ -107,3 +111,12 @@ void SignIn::on_pushButton_staffSignin_clicked()
     }
 }
 
+QString SignIn::getUsername()
+{
+    return currentUserName;
+}
+
+QString SignIn::getPassword()
+{
+    return currentUserPass;
+}

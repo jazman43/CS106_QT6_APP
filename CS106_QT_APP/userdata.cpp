@@ -4,7 +4,7 @@
 #include <QMessageBox>
 #include "./H_files/edituser.h"
 #include "./H_files/deleteusers.h"
-#include "./H_files/Utils/mainwindow.h"
+#include "./H_files/Utils/loginwindow.h"
 
 
 userData::userData(QWidget *parent) :
@@ -59,8 +59,8 @@ void userData::on_pushButton_deleteUser_clicked()
 
 void userData::on_pushButton_backToMenu_clicked()
 {
-    MainWindow* adminMenu = new MainWindow();
-    emit adminMenu->adminWindowHidden();
+    loginWindow* homeMenu = new loginWindow();
+    emit homeMenu->homeWindowHidden();
     this->hide();
 }
 

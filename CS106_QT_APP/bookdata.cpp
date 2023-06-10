@@ -2,7 +2,7 @@
 #include "./UI_files/ui_bookdata.h"
 #include "./H_files/editbooks.h"
 #include "./H_files/deletebooks.h"
-#include "./H_files/Utils/mainwindow.h"
+#include "./H_files/Utils/loginwindow.h"
 
 
 bookData::bookData(QWidget *parent) :
@@ -99,8 +99,8 @@ void bookData::on_pushButton_deleteBook_clicked()
 
 void bookData::on_pushButton_backToMenu_clicked()
 {
-    MainWindow* adminMenu = new MainWindow();
-    emit adminMenu->adminWindowHidden();
+    loginWindow* homeMenu = new loginWindow();
+    emit homeMenu->homeWindowHidden();
     this->hide();
 }
 

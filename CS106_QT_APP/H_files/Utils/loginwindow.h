@@ -25,14 +25,23 @@ public:
     void login();
     void loginCheck();
 
+    void onHomeWindowHidden();
+
 private slots:
 
 
     void on_pushButton_login_clicked();
 
+    void on_pushButton_logoutStaff_clicked();
+
+    void on_pushButton_BookMenu_clicked();
+
+    void on_pushButton_UserMenus_clicked();
+
 private:
     Ui::loginWindow *ui;
 
+    QString currentUser;
 
     QStackedWidget* stackedWidget;
 
@@ -41,6 +50,10 @@ private:
     SignIn* signinWindow = new SignIn();
 
     void defaultAdminUser();
+
+
+signals:
+    void homeWindowHidden();
 
 };
 

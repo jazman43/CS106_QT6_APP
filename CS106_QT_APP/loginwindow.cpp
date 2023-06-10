@@ -1,7 +1,8 @@
 #include "./H_files/Utils/loginwindow.h"
 #include "./UI_files/ui_loginwindow.h"
-#include "./H_files/Utils/mainwindow.h"
-#include "./H_files/Utils/membermenu.h"
+#include "./H_files/bookdata.h"
+#include "H_files/userdata.h"
+
 
 #include <QMessageBox>
 
@@ -17,7 +18,7 @@ loginWindow::loginWindow(QWidget *parent) :
 
     stackedWidget->setCurrentIndex(0);
 
-     //signinWindow;
+
 
     connect(signinWindow, &SignIn::userChecked, this, &loginWindow::loginCheck);
 
@@ -28,6 +29,8 @@ loginWindow::loginWindow(QWidget *parent) :
         defaultAdminUser();
     }
 
+
+    connect(this, &loginWindow::homeWindowHidden, this, &loginWindow::onHomeWindowHidden);
 }
 
 loginWindow::~loginWindow()
@@ -56,23 +59,33 @@ void loginWindow::loginCheck()
 
     if(signinWindow->staffLoggedOn)
     {
-        //admin is logged in
+        // admin is logged in
         stackedWidget->setCurrentIndex(2);
 
-        for(int i = 0; i < rowCount; i++)
+        QString loggedInUsername;
+
+        for (int i = 0; i < rowCount; i++)
         {
             QJsonObject object = jsonUserDataArray[i].toObject();
 
             QString userName = object["userName"].toString();
             QString password = object["password"].toString();
 
-
-            if (userName == "Admin" && password == "Admin") {
-
+            if (userName == "Admin" && password == "Admin")
+            {
                 QMessageBox::warning(this, "Change Password", "Please change the default password for the admin user.");
+            }
+
+
+            if (userName == signinWindow->getUsername() && password == signinWindow->getPassword())
+            {
+                loggedInUsername = userName;
+                break;
             }
         }
 
+
+        currentUser = loggedInUsername;
 
 
     }else
@@ -102,5 +115,41 @@ void loginWindow::defaultAdminUser()
     if(files.writeToJson(files.filePathMemberData ,jsonNewUserObj, 1))
     {
     }
+
+}
+
+void loginWindow::on_pushButton_logoutStaff_clicked()
+{
+
+    if (!currentUser.isEmpty())
+    {
+        stackedWidget->setCurrentIndex(0);
+        QMessageBox::information(this, "Log Out", "User " + currentUser + " has Logged out");
+    }
+
+
+}
+
+
+void loginWindow::on_pushButton_BookMenu_clicked()
+{
+    this->hide();
+    bookData *bookdata = new bookData();
+    bookdata->show();
+}
+
+
+void loginWindow::on_pushButton_UserMenus_clicked()
+{
+    this->hide();
+    userData *userdata = new userData();
+    userdata->show();
+}
+
+void loginWindow::onHomeWindowHidden()
+{
+
+    show();
+    loginCheck();
 
 }

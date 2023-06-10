@@ -20,6 +20,8 @@ public:
     bool staffLoggedOn;
     bool userFound;
 
+    QString getUsername();
+    QString getPassword();
 
 private slots:
     void on_pushButton_memberSignin_clicked();
@@ -30,6 +32,9 @@ private:
     Ui::SignIn *ui;
 
     fileManagement files;
+
+    QString currentUserPass;
+    QString currentUserName;
 
 
 signals:
