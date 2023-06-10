@@ -17,17 +17,23 @@ public:
     ~deleteUsers();
 
 private slots:
-    void on_pushButton_clicked();
+
 
     void on_pushButton_deleteUser_clicked();
 
     void on_pushButton_findUserID_clicked();
+
+    void on_pushButton_close_clicked();
 
 private:
     Ui::deleteUsers *ui;
 
 
     fileManagement files;
+
+
+signals:
+    void deleteSelectedUser();
 };
 
 #endif // DELETEUSERS_H

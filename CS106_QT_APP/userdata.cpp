@@ -46,6 +46,8 @@ void userData::on_pushButton_modfiyUser_clicked()
 {
     editUser *edituser = new editUser();
     edituser->show();
+
+    connect(edituser, &editUser::modifySelectedUser, this, &userData::onNewUserAdded);
 }
 
 
@@ -53,7 +55,7 @@ void userData::on_pushButton_deleteUser_clicked()
 {
     deleteUsers * deleteuser = new deleteUsers();
     deleteuser->show();
-
+    connect(deleteuser, &deleteUsers::deleteSelectedUser, this, &userData::onNewUserAdded);
 }
 
 

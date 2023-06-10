@@ -13,10 +13,7 @@ deleteUsers::~deleteUsers()
     delete ui;
 }
 
-void deleteUsers::on_pushButton_clicked()
-{
 
-}
 
 
 void deleteUsers::on_pushButton_deleteUser_clicked()
@@ -24,6 +21,10 @@ void deleteUsers::on_pushButton_deleteUser_clicked()
     QString id = ui->lineEdit_findUserID->text();
 
     files.deleteJsonElement(files.filePathMemberData, id);
+
+    emit deleteSelectedUser();
+
+    accept();
 }
 
 
@@ -39,5 +40,11 @@ void deleteUsers::on_pushButton_findUserID_clicked()
 
     ui->lineEdit_name->setText(userName);
 
+}
+
+
+void deleteUsers::on_pushButton_close_clicked()
+{
+    reject();
 }
 

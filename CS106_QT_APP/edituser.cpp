@@ -57,5 +57,8 @@ void editUser::on_pushButton_save_changes_clicked()
     files.modifyJson(files.filePathMemberData,"password",password,id);
     files.modifyJson(files.filePathMemberData,"address",address,id);
     files.modifyJson(files.filePathMemberData,"phoneNumber",phoneNumber,id);
+
+    emit modifySelectedUser();
+    accept();
 }
 
