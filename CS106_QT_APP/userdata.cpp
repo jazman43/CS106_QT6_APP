@@ -65,7 +65,7 @@ void userData::on_pushButton_deleteUser_clicked()
 void userData::on_pushButton_backToMenu_clicked()
 {
     MainWindow* adminMenu = new MainWindow();
-    emit adminMenu->adminWindowHidden();
+    emit adminMenu->homeWindowHidden();
     this->hide();
 }
 

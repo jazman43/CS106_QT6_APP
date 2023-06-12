@@ -100,7 +100,7 @@ void bookData::on_pushButton_deleteBook_clicked()
 void bookData::on_pushButton_backToMenu_clicked()
 {
     MainWindow* adminMenu = new MainWindow();
-    emit adminMenu->adminWindowHidden();
+    emit adminMenu->homeWindowHidden();
     this->hide();
 }
 
