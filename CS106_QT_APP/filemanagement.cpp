@@ -1,10 +1,8 @@
 #include "./H_files/Utils/filemanagement.h"
 
-
 fileManagement::fileManagement()
 {
     QFile fileUser(filePathMemberData);
-
 
     if(!fileUser.exists())
     {
@@ -16,10 +14,9 @@ fileManagement::fileManagement()
 
 }
 
-
 fileManagement::~fileManagement(){}
 
-
+// Read from json file
 QJsonObject fileManagement::readFromJson(const QString& filePath)
 {
     QFile jsonFile(filePath);
@@ -44,7 +41,7 @@ QJsonObject fileManagement::readFromJson(const QString& filePath)
 }
 
 
-
+// Write to json file
 bool fileManagement::writeToJson(const QString& filePath, const QJsonObject& jsonObject, bool append)
 {
     QFile jsonFile(filePath);
@@ -99,6 +96,7 @@ bool fileManagement::writeToJson(const QString& filePath, const QJsonObject& jso
 
 }
 
+// Select object by id and modify it
 bool fileManagement::modifyJson(const QString& filePath, const QString& elementKey, const QJsonValue& newValue, const QString& objectId)
 {
     QFile jsonFile(filePath);
@@ -164,6 +162,7 @@ bool fileManagement::modifyJson(const QString& filePath, const QString& elementK
     return (bytesWritten != -1 && bytesWritten == jsonData.size());
 }
 
+// Delete object by id
 bool fileManagement::deleteJsonElement(const QString& filePath, const QString& objectId)
 {
 
@@ -227,7 +226,7 @@ bool fileManagement::deleteJsonElement(const QString& filePath, const QString& o
 
 }
 
-
+// Check if file by ID / exists
 int fileManagement::checkFileID(const QString& filePath, const QString& key)
 {
     int  maxId = 1;
@@ -260,7 +259,7 @@ int fileManagement::checkFileID(const QString& filePath, const QString& key)
     return maxId + 1;
 }
 
-
+// Select object by ID
 QJsonObject fileManagement::selectObjectByID(const QString& filePath, int id)
 {
     QJsonObject jsonObject = readFromJson(filePath);
@@ -282,7 +281,7 @@ QJsonObject fileManagement::selectObjectByID(const QString& filePath, int id)
     return QJsonObject();
 }
 
-
+// Select object by ID
 bool fileManagement::checkFileExists(const QString& filePath)
 {
     QFile checkFile(filePath);
