@@ -21,7 +21,8 @@ Our system will be used by both library staff and members. Staff will use the sy
 
 ## Timeline and Project Constraints
 
-**Due Date:** 8th June
+**Design:** 8th June
+**Outcome:** 15th June
 
 Our main constraint is the short period of time available to complete the assignment. We will need to manage our time effectively and prioritise tasks to ensure that we meet the deadline.
 
