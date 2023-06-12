@@ -41,7 +41,7 @@ void editBooks::on_pushButton_findID_clicked()
 
 void editBooks::on_pushButton_saveNewBook_clicked()
 {
-    QString id = ui->lineEdit_findId->text();
+    int id = ui->lineEdit_findId->text().toInt();
 
     QString bookTitle = ui->lineEdit_title->text();
     QString author = ui->lineEdit_author->text();

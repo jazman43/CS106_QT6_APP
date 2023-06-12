@@ -53,6 +53,9 @@ MainWindow::~MainWindow()
 void MainWindow::loginCheck()
 {
 
+    QJsonObject jsonCurrentUser = files.readFromJson(files.filePathCurrentUser);
+
+
     QJsonObject jsonUserData = files.readFromJson(files.filePathMemberData);
     QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray();
 
@@ -60,10 +63,11 @@ void MainWindow::loginCheck()
 
 
 
-    if(signinWindow->staffLoggedOn)
+    if(signinWindow->staffLoggedOn && !jsonCurrentUser.empty())
     {
         // admin is logged in
         stackedWidget->setCurrentIndex(2);
+
 
         QString loggedInUsername;
 
@@ -93,7 +97,7 @@ void MainWindow::loginCheck()
 
     }else
     {
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(0);
     }
 
 
@@ -127,8 +131,10 @@ void MainWindow::defaultAdminUser()
 void MainWindow::onHomeWindowHidden()
 {
 
-    show();
+
     loginCheck();
+    show();
+
 
 }
 
@@ -159,10 +165,31 @@ void MainWindow::on_pushButton_StaffBooksEdit_clicked()
 
 void MainWindow::on_pushButton_StaffSignOut_clicked()
 {
-    if (!currentUser.isEmpty())
+    QJsonObject currentJsonUserObj = files.readFromJson(files.filePathCurrentUser);
+    QJsonArray jsonUserDataArray = currentJsonUserObj.contains("data") ? currentJsonUserObj["data"].toArray() : QJsonArray();
+
+
+    int rowCount = jsonUserDataArray.size();
+
+    if (!currentJsonUserObj.isEmpty())
     {
-        stackedWidget->setCurrentIndex(1);
-        QMessageBox::information(this, "Log Out", "User " + currentUser + " has Logged out");
+        for (int i = 0; i < rowCount; ++i) {
+            QJsonObject object = jsonUserDataArray[i].toObject();
+
+            stackedWidget->setCurrentIndex(1);
+
+
+            int id = object["id"].toInt();
+            QString currentUsername = object["userName"].toString();
+
+            files.deleteJsonElement(files.filePathCurrentUser,id);
+
+            QMessageBox::information(this, "Log Out", "User " + currentUsername + " has Logged out");
+        }
+
+
+
+
     }
 
 }
@@ -203,4 +230,5 @@ void MainWindow::on_navAccount_Staff_clicked(bool checked)//staff Account DropDo
         //isGuestFrameVisible = false;
     }
 }
+
 

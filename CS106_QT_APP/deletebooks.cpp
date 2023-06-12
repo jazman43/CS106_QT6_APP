@@ -15,7 +15,7 @@ deleteBooks::~deleteBooks()
 
 void deleteBooks::on_pushButton_deleteBook_clicked()
 {
-    QString id = ui->lineEdit_findId->text();
+    int id = ui->lineEdit_findId->text().toInt();
 
     files.deleteJsonElement(files.filePathBooks, id);
 

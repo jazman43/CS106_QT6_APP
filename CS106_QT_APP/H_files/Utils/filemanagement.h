@@ -24,9 +24,9 @@ public:
 
     QJsonObject readFromJson(const QString& filePath);
 
-    bool modifyJson(const QString& filePath, const QString& elementKey, const QJsonValue& newValue, const QString& objectId);
+    bool modifyJson(const QString& filePath, const QString& elementKey, const QJsonValue& newValue, const int& objectId);
 
-    bool deleteJsonElement(const QString& filePath, const QString& objectId);
+    bool deleteJsonElement(const QString& filePath, const int& objectId);
 
     int checkFileID(const QString& filePath, const QString& key);
 
@@ -38,6 +38,8 @@ public:
     QString filePathMemberData = "./MemberData.json";
 
     QString filePathBooks= "./BooksData.json";
+
+    QString filePathCurrentUser = "./CurrentUser.json";
 
 private:
 
