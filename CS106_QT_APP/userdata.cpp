@@ -6,54 +6,52 @@
 #include "./H_files/deleteusers.h"
 #include "./H_files/Utils/mainwindow.h"
 
-
+// Create QWidget userData
 userData::userData(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::userData)
 {
     ui->setupUi(this);
 
+    QJsonObject adminUser = filemanager.selectObjectByID(filemanager.filePathMemberData,1); // Select admin user
 
-
-    QJsonObject adminUser = filemanager.selectObjectByID(filemanager.filePathMemberData,1);
-
+    // If admin user is empty then create default admin user
     if(adminUser.empty())
     {
         defaultAdminUser();
     }
-
     loadUserDataTable();
-
-
 }
 
+// Delete QWidget userData
 userData::~userData()
 {
     delete ui;
 }
 
+// Create new user
 void userData::on_pushButton_newUser_clicked()
 {
     newUser *newuser = new newUser();
     newuser->show();
 
-
     connect(newuser, &newUser::userAdded, this, &userData::onNewUserAdded);
 }
 
+// Update user table
 void userData::onNewUserAdded()
 {
     loadUserDataTable();
 }
 
-
+// Open edit user window
 void userData::on_pushButton_modfiyUser_clicked()
 {
     editUser *edituser = new editUser();
     edituser->show();
 }
 
-
+// Open delete user window
 void userData::on_pushButton_deleteUser_clicked()
 {
     deleteUsers * deleteuser = new deleteUsers();
@@ -61,7 +59,7 @@ void userData::on_pushButton_deleteUser_clicked()
 
 }
 
-
+// Back to main window
 void userData::on_pushButton_backToMenu_clicked()
 {
     MainWindow* adminMenu = new MainWindow();
@@ -69,26 +67,25 @@ void userData::on_pushButton_backToMenu_clicked()
     this->hide();
 }
 
-
-
+// Load user table
 void userData::loadUserDataTable()
 {
+    // Read user data from json file
     QJsonObject jsonUserData = filemanager.readFromJson(filemanager.filePathMemberData);
     QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray();
-
     int rowCount = jsonUserDataArray.size();
 
+    // Set table column and row count
     ui->tableWidget->setColumnCount(9);
     ui->tableWidget->setHorizontalHeaderLabels({"user name","parssword" ,"is Admin","address","ID","phone number" ,"current Books","Over-Due books", "start date"});
     ui->tableWidget->setRowCount(rowCount);
 
-
-
+    // Set table data
     for(int i = 0; i < rowCount; i++)
     {
-        QJsonObject object = jsonUserDataArray[i].toObject();
+        QJsonObject object = jsonUserDataArray[i].toObject(); // Get user data
 
-
+        // Set user data
         QString userName = object["userName"].toString();
         QString password = object["password"].toString();
         QString isAdmin = object["isAdmin"].toBool() ? "true" : "false";
@@ -99,19 +96,18 @@ void userData::loadUserDataTable()
         QString overDueBooks = object["over-dueBooks"].toString();
         QString startDate = object["startDate"].toString();
 
-
-
-
-
+        // Set table item
         QTableWidgetItem *item1 = new QTableWidgetItem(userName);
         QTableWidgetItem *item2 = new QTableWidgetItem(password);
-        if (userName == "Admin" && password == "Admin") {
 
+        // If user is admin then set background color to yellow
+        if (userName == "Admin" && password == "Admin")
+        {
             item2->setBackground(Qt::yellow);
-
             QMessageBox::warning(this, "Change Password", "Please change the default password for the admin user.");
         }
 
+        // Set table item
         QTableWidgetItem *item3 = new QTableWidgetItem(isAdmin);
         QTableWidgetItem *item4 = new QTableWidgetItem(address);
         QTableWidgetItem *item5 = new QTableWidgetItem(id);
@@ -120,6 +116,7 @@ void userData::loadUserDataTable()
         QTableWidgetItem *item8 = new QTableWidgetItem(overDueBooks);
         QTableWidgetItem *item9 = new QTableWidgetItem(startDate);
 
+        // Add data to table
         ui->tableWidget->setItem(i, 0, item1);
         ui->tableWidget->setItem(i, 1, item2);
         ui->tableWidget->setItem(i, 2, item3);
