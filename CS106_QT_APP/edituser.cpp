@@ -38,7 +38,8 @@ void editUser::on_pushButton_find_ID_clicked()
 // Save the new user information
 void editUser::on_pushButton_save_changes_clicked()
 {
-    QString id = ui->lineEdit_find_ID->text();
+
+    int id = ui->lineEdit_find_ID->text().toInt();
     QString userName = ui->lineEdit_name->text();
     QString password = ui->lineEdit_password->text();
     QString address = ui->lineEdit_address->text();

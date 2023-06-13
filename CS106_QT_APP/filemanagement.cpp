@@ -97,7 +97,7 @@ bool fileManagement::writeToJson(const QString& filePath, const QJsonObject& jso
 }
 
 // Select object by id and modify it
-bool fileManagement::modifyJson(const QString& filePath, const QString& elementKey, const QJsonValue& newValue, const QString& objectId)
+bool fileManagement::modifyJson(const QString& filePath, const QString& elementKey, const QJsonValue& newValue, const int& objectId)
 {
     QFile jsonFile(filePath);
     if (!jsonFile.open(QIODevice::ReadWrite | QIODevice::Text))
@@ -128,7 +128,7 @@ bool fileManagement::modifyJson(const QString& filePath, const QString& elementK
     for (int i = 0; i < jsonArray.size(); i++)
     {
         QJsonObject innerObject = jsonArray[i].toObject();
-        if (innerObject.contains("id") && innerObject["id"].toInt() == objectId.toInt())
+        if (innerObject.contains("id") && innerObject["id"].toInt())
         {
             found = true;
             if (innerObject.contains(elementKey))
@@ -163,7 +163,7 @@ bool fileManagement::modifyJson(const QString& filePath, const QString& elementK
 }
 
 // Delete object by id
-bool fileManagement::deleteJsonElement(const QString& filePath, const QString& objectId)
+bool fileManagement::deleteJsonElement(const QString& filePath, const int& objectId)
 {
 
     QFile jsonFile(filePath);
@@ -195,7 +195,7 @@ bool fileManagement::deleteJsonElement(const QString& filePath, const QString& o
     for (int i = 0; i < jsonArray.size(); i++)
     {
         QJsonObject innerObject = jsonArray[i].toObject();
-        if (innerObject.contains("id") && innerObject["id"].toInt() == objectId.toInt())
+        if (innerObject.contains("id") && innerObject["id"].toInt())
         {
             found = true;
             jsonArray.removeAt(i);

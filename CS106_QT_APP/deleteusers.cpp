@@ -23,7 +23,8 @@ void deleteUsers::on_pushButton_clicked()
 // Delete the selected user
 void deleteUsers::on_pushButton_deleteUser_clicked()
 {
-    QString id = ui->lineEdit_findUserID->text();
+
+    int id = ui->lineEdit_findUserID->text().toInt();
     files.deleteJsonElement(files.filePathMemberData, id);
 }
 

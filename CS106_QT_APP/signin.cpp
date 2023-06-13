@@ -61,6 +61,10 @@ void Signin::on_pushButton_StaffLogin_clicked()
             currentUserName = userName;
             currentUserPass = passwordSaved;
 
+            if(files.writeToJson(files.filePathCurrentUser ,object, 1))
+            {
+            }
+
             emit userChecked();
 
             accept();
@@ -102,6 +106,11 @@ void Signin::on_pushButton_memberLogin_clicked()
         {
             staffLoggedOn = false;
             userFound =true;
+
+            if(files.writeToJson(files.filePathCurrentUser ,object, 1))
+            {
+            }
+
             emit userChecked();
 
             accept();

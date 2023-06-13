@@ -61,6 +61,8 @@ private:
     bool isStaffFrameVisible = false;
 
 
+
+
 signals:
     void homeWindowHidden();
 };
