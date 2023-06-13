@@ -3,6 +3,7 @@
 #include "./H_files/editbooks.h"
 #include "./H_files/deletebooks.h"
 #include "./H_files/Utils/mainwindow.h"
+#include "./H_files/categorymodadddel.h"
 
 // Create QWidget bookData
 bookData::bookData(QWidget *parent) :
@@ -97,3 +98,11 @@ void bookData::on_pushButton_backToMenu_clicked()
     emit adminMenu->homeWindowHidden();
     this->hide();
 }
+
+void bookData::on_pushButton_Catagoryes_clicked()
+{
+    categoryModAddDel* categoryWin = new categoryModAddDel();
+
+    categoryWin->show();
+}
+

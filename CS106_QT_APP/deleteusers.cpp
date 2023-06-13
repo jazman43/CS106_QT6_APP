@@ -15,11 +15,6 @@ deleteUsers::~deleteUsers()
     delete ui;
 }
 
-void deleteUsers::on_pushButton_clicked()
-{
-    // TODO: What is this ?
-}
-
 // Delete the selected user
 void deleteUsers::on_pushButton_deleteUser_clicked()
 {
@@ -38,5 +33,9 @@ void deleteUsers::on_pushButton_findUserID_clicked()
     ui->lineEdit_name->setText(userName);
 }
 
-// TODO: Cancel the delete user
+
+void deleteUsers::on_pushButton_cancel_clicked()
+{
+    reject();
+}
 

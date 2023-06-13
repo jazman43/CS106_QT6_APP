@@ -26,6 +26,8 @@ private slots:
 
     void on_pushButton_backToMenu_clicked();
 
+    void on_pushButton_Catagoryes_clicked();
+
 private:
     Ui::bookData *ui;
 
