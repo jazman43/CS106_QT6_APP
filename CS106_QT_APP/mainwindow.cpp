@@ -347,3 +347,89 @@ void MainWindow::checkBookOut()
 
 
 }
+
+
+void MainWindow::returnBook(int userId, int bookId)
+{
+    QJsonObject jsonBookData = files.readFromJson(files.filePathBooks);
+    QJsonObject jsonUserData = files.readFromJson(files.filePathMemberData);
+    QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray();
+    QJsonArray jsonBookDataArray = jsonBookData.contains("data") ? jsonBookData["data"].toArray() : QJsonArray();
+
+    int rowCount = jsonUserDataArray.size();
+    int bookCount = jsonBookDataArray.size();
+
+    int userIndex = -1;
+    int bookIndex = -1;
+
+    // Find the user index
+    for (int i = 0; i < rowCount; i++)
+    {
+        QJsonObject userObj = jsonUserDataArray[i].toObject();
+        if (userObj["id"].toInt() == userId)
+        {
+            userIndex = i;
+            break;
+        }
+    }
+
+    // Find the book index
+    for (int i = 0; i < bookCount; i++)
+    {
+        QJsonObject bookObj = jsonBookDataArray[i].toObject();
+        if (bookObj["id"].toInt() == bookId)
+        {
+            bookIndex = i;
+            break;
+        }
+    }
+
+    if (userIndex != -1 && bookIndex != -1)
+    {
+        QJsonObject userObj = jsonUserDataArray[userIndex].toObject();
+        QJsonObject bookObj = jsonBookDataArray[bookIndex].toObject();
+
+        bool isCheckedOut = bookObj["isCheckOut"].toBool();
+        QString bookName = bookObj["title"].toString();
+        QString checkoutDate = bookObj["checkoutDate"].toString();
+
+        // Update book information
+        bookObj["memberID"] = -1; // Reset member ID to indicate its not checked out
+        bookObj["isCheckOut"] = isCheckedOut = false;
+        bookObj["checkoutDate"] = "";
+
+        // Remove the book from the users currentBooks array
+        QJsonArray currentBooksArray = userObj["currentBooks"].toArray();
+        QJsonArray updatedCurrentBooksArray;
+
+        // Find the checked out book in the currentBooks array and remove it
+        for (int i = 0; i < currentBooksArray.size(); i++)
+        {
+            QJsonObject bookDataObj = currentBooksArray[i].toObject();
+            if (bookDataObj["bookId"].toInt() != bookId)
+            {
+                updatedCurrentBooksArray.append(bookDataObj);
+            }
+        }
+
+        userObj["currentBooks"] = updatedCurrentBooksArray;
+
+        jsonUserDataArray.replace(userIndex, userObj);
+        jsonUserData["data"] = jsonUserDataArray;
+
+        if (!files.writeToJson(files.filePathMemberData, jsonUserData, 1) && !files.writeToJson(files.filePathBooks, bookObj, 1))
+        {
+            qDebug() << "Failed to write to json file (Return Book)";
+        }
+        else
+        {
+
+            QMessageBox::information(this, "Book Returned", bookName + " has been returned.");
+
+        }
+    }
+    else
+    {
+        QMessageBox::warning(this, "Invalid Book/User", "Book or user does not exist.");
+    }
+}

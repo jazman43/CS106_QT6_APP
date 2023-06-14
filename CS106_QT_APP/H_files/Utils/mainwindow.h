@@ -65,6 +65,8 @@ private:
 
     void checkBookOut();
 
+    void returnBook(int userId, int bookId);
+
 signals:
     void homeWindowHidden();
 };
