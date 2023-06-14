@@ -34,7 +34,13 @@ void bookData::onNewBookAdded() // onNewBookAdded():
     // get the book data from the json file
     QJsonObject jsonBookData = files.readFromJson(files.filePathBooks);
     QJsonArray jsonBookDataArray = jsonBookData.contains("data") ? jsonBookData["data"].toArray() : QJsonArray();
+    QJsonObject categoryObject = files.readFromJson(files.filePathCategory);
+    QJsonArray jsonCategoryObjectArray = categoryObject.contains("data") ? categoryObject["data"].toArray() : QJsonArray();
+
+
+
     int rowCount = jsonBookDataArray.size();
+    int categoryCount = jsonCategoryObjectArray.size();
 
     // set up the table
     ui->tableWidget->setColumnCount(6);
@@ -46,10 +52,31 @@ void bookData::onNewBookAdded() // onNewBookAdded():
     {
         QJsonObject object = jsonBookDataArray[i].toObject(); // get the book object
 
+        int genere = object["genre"].toInt();
+        QString genereName;
+
+        for(int i = 0; i < categoryCount;i++)
+        {
+            QJsonObject categoryObject = jsonCategoryObjectArray[i].toObject();
+
+
+            QString categoryName = categoryObject["categoryName"].toString();
+            int categoryID = categoryObject["id"].toInt();
+
+            if(categoryID == genere)
+            {
+                genereName = categoryName;
+                break;
+            }
+
+        }
+
+
+
         // get the book data
         QString bookTitle = object["title"].toString();
         QString author = object["author"].toString();
-        QString genere = object["genre"].toString();
+
         QString year = object["year"].toString();
         QString id = QString::number(object["id"].toInt());
         QString discripsion = object["discripsion"].toString();
@@ -57,7 +84,7 @@ void bookData::onNewBookAdded() // onNewBookAdded():
         // set the book data to the table
         QTableWidgetItem *item1 = new QTableWidgetItem(bookTitle);
         QTableWidgetItem *item2 = new QTableWidgetItem(author);
-        QTableWidgetItem *item3 = new QTableWidgetItem(genere);
+        QTableWidgetItem *item3 = new QTableWidgetItem(genereName);
         QTableWidgetItem *item4 = new QTableWidgetItem(year);
         QTableWidgetItem *item5 = new QTableWidgetItem(id);
         QTableWidgetItem *item6 = new QTableWidgetItem(discripsion);

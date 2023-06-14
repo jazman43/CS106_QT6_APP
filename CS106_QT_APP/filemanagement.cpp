@@ -128,7 +128,7 @@ bool fileManagement::modifyJson(const QString& filePath, const QString& elementK
     for (int i = 0; i < jsonArray.size(); i++)
     {
         QJsonObject innerObject = jsonArray[i].toObject();
-        if (innerObject.contains("id") && innerObject["id"].toInt())
+        if (innerObject.contains("id") && innerObject["id"].toInt() == objectId)
         {
             found = true;
             if (innerObject.contains(elementKey))

@@ -21,6 +21,8 @@ void deleteUsers::on_pushButton_deleteUser_clicked()
 
     int id = ui->lineEdit_findUserID->text().toInt();
     files.deleteJsonElement(files.filePathMemberData, id);
+
+    emit userDeleted();
 }
 
 // Find the selected user

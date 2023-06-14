@@ -2,6 +2,7 @@
 #define NEWBOOK_H
 
 #include <QDialog>
+#include "./Utils/filemanagement.h"
 
 namespace Ui {
 class newBook;
@@ -18,7 +19,9 @@ public:
 private:
     Ui::newBook *ui;
 
+    fileManagement files;
 
+    void addCategorys();
 signals:
 
     void addedNewBook();

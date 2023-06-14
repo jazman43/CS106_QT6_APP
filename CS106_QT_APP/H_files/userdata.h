@@ -33,8 +33,6 @@ private:
 
     void loadUserDataTable();
 
-    void onNewUserAdded();
-
     void defaultAdminUser();
 
 

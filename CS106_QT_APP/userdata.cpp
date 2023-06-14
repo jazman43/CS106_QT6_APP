@@ -15,6 +15,8 @@ userData::userData(QWidget *parent) :
 
     QJsonObject adminUser = filemanager.selectObjectByID(filemanager.filePathMemberData,1); // Select admin user
 
+
+
     // If admin user is empty then create default admin user
     if(adminUser.empty())
     {
@@ -35,20 +37,16 @@ void userData::on_pushButton_newUser_clicked()
     newUser *newuser = new newUser();
     newuser->show();
 
-    connect(newuser, &newUser::userAdded, this, &userData::onNewUserAdded);
+    connect(newuser, &newUser::userAdded, this, &userData::loadUserDataTable);
 }
 
-// Update user table
-void userData::onNewUserAdded()
-{
-    loadUserDataTable();
-}
 
 // Open edit user window
 void userData::on_pushButton_modfiyUser_clicked()
 {
     editUser *edituser = new editUser();
     edituser->show();
+    connect(edituser, &editUser::userModify, this, &userData::loadUserDataTable);
 }
 
 // Open delete user window
@@ -56,6 +54,7 @@ void userData::on_pushButton_deleteUser_clicked()
 {
     deleteUsers * deleteuser = new deleteUsers();
     deleteuser->show();
+    connect(deleteuser, &deleteUsers::userDeleted, this, &userData::loadUserDataTable);
 
 }
 

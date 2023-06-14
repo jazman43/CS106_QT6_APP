@@ -29,6 +29,10 @@ private:
 
 
     fileManagement files;
+
+
+signals:
+    void userDeleted();
 };
 
 #endif // DELETEUSERS_H

@@ -25,6 +25,10 @@ private:
     Ui::editUser *ui;
 
     fileManagement files;
+
+
+signals:
+    void userModify();
 };
 
 #endif // EDITUSER_H
