@@ -30,18 +30,24 @@ void newBook::on_pushButton_saveNewBook_clicked()
     QString year = ui->lineEdit_Year->text();
     QString discripsion = ui->textEdit_discripsion->toPlainText();
 
+    bool isCheckedOut = false;
+    bool isReaeved = false;
+    int memberID = NULL;
 
     // Set the book information
-    QJsonObject jsonNewUserObj;
-    jsonNewUserObj["title"] = bookTitle;
-    jsonNewUserObj["author"] = author;
-    jsonNewUserObj["genre"] = genere;
-    jsonNewUserObj["year"] = year;
-    jsonNewUserObj["id"] = files.checkFileID(files.filePathBooks, "id");
-    jsonNewUserObj["discripsion"] = discripsion;
+    QJsonObject jsonNewBookObj;
+    jsonNewBookObj["title"] = bookTitle;
+    jsonNewBookObj["author"] = author;
+    jsonNewBookObj["genre"] = genere;
+    jsonNewBookObj["year"] = year;
+    jsonNewBookObj["id"] = files.checkFileID(files.filePathBooks, "id");
+    jsonNewBookObj["discripsion"] = discripsion;
+    jsonNewBookObj["isCheckOut"] = isCheckedOut;
+    jsonNewBookObj["isReserved"] = isReaeved;
+    jsonNewBookObj["memberID"] = memberID;
 
     // Write to json file
-    if(files.writeToJson(files.filePathBooks ,jsonNewUserObj, 1))
+    if(files.writeToJson(files.filePathBooks ,jsonNewBookObj, 1))
     {
         emit addedNewBook();
 

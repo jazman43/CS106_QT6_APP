@@ -265,3 +265,85 @@ void MainWindow::on_tableWidget_BookDisplay_cellClicked(int row, int column)
 
 }
 
+void MainWindow::checkBookOut()
+{
+
+    QJsonObject jsonBookData = files.readFromJson(files.filePathBooks);
+    QJsonObject jsonUserData = files.readFromJson(files.filePathMemberData);
+    QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray();
+    QJsonArray jsonBookDataArray = jsonBookData.contains("data") ? jsonBookData["data"].toArray() : QJsonArray();
+
+
+    int rowCount = jsonUserDataArray.size();
+    int bookCount = jsonBookDataArray.size();
+
+    int selectedUserIndex = 0;
+    int selectedBookIndex = 0;
+
+
+    if (selectedUserIndex >= 0 && selectedUserIndex < rowCount && selectedBookIndex >= 0 && selectedBookIndex < bookCount)
+    {
+
+        QJsonObject selectedUser = jsonUserDataArray[selectedUserIndex].toObject();
+        QJsonObject selectedBook = jsonBookDataArray[selectedBookIndex].toObject();
+
+
+        int memberID = selectedUser["id"].toInt();
+        bool isCheckedOut = selectedBook["isCheckOut"].toBool();
+        int bookId = selectedBook["id"].toInt();
+        QString bookName = selectedBook["title"].toString();
+        QString checkoutDate = QDate::currentDate().toString("dd-MM-yyyy");
+
+        QDate dueDate = QDate::currentDate().addDays(10);
+
+        selectedBook["memberID"] = memberID;
+        selectedBook["isCheckOut"] = isCheckedOut = true;
+
+
+        QJsonObject checkedOutBook;
+        checkedOutBook["bookId"] = bookId;
+        checkedOutBook["checkoutDate"] = checkoutDate;
+
+
+        QJsonArray currentBooksArray = selectedUser["currentBooks"].toArray();
+        currentBooksArray.append(checkedOutBook);
+        selectedUser["currentBooks"] = currentBooksArray;
+
+
+        jsonUserDataArray.replace(selectedUserIndex, selectedUser);
+
+
+        jsonUserData["data"] = jsonUserDataArray;
+
+
+        if (!files.writeToJson(files.filePathMemberData, jsonUserData,1) && !files.writeToJson(files.filePathBooks,selectedBook,1))
+        {
+            qDebug() << "Failed to write to json file (Check Out)";
+
+        }else
+        {
+
+
+            QDate today = QDate::currentDate();
+            int daysUntilDue = today.daysTo(dueDate);
+
+            if (daysUntilDue == 1)
+            {
+               QMessageBox::information(this, "Book Due", "" + bookName + " is Due IN ONE day");
+            }
+            else if (daysUntilDue <= 0)
+            {
+                QMessageBox::warning(this, "Book Due", "" + bookName + " is Over-Due Please Return");
+            }
+        }
+
+
+
+    }
+    else
+    {
+        QMessageBox::warning(this, "Check out", "user or Book dosent Exist");
+    }
+
+
+}

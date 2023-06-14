@@ -63,7 +63,7 @@ private:
     bool isStaffFrameVisible = false;
 
 
-
+    void checkBookOut();
 
 signals:
     void homeWindowHidden();

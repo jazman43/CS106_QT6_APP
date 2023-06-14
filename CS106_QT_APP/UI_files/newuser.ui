@@ -84,7 +84,18 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_isAdmin"/>
+       <widget class="QRadioButton" name="radioButton_true">
+        <property name="text">
+         <string>true</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_false">
+        <property name="text">
+         <string>false</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

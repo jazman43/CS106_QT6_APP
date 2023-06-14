@@ -24,9 +24,18 @@ void newUser::on_buttonBox_accepted()
     // Get the user information
     QString userName = ui->lineEdit_name->text();
     QString password = ui->lineEdit_pasword->text();
-    QString isAdmin = ui->lineEdit_isAdmin->text();
+    bool isAdminFalse = ui->radioButton_false->isChecked();
+    bool isAdminTrue = ui->radioButton_true->isChecked();
     QString address = ui->lineEdit_address->text();
     QString phoneNumber = ui->lineEdit_phoneNumber->text();
+
+    bool isAdmin= false;
+
+    if(isAdminTrue)
+        isAdmin = true;
+    else if(isAdminFalse)
+        isAdmin = false;
+
 
     // Set the user information
     QJsonObject jsonNewUserObj;
@@ -36,8 +45,14 @@ void newUser::on_buttonBox_accepted()
     jsonNewUserObj["address"] = address;
     jsonNewUserObj["id"] = fileManager.checkFileID(fileManager.filePathMemberData, "id");
     jsonNewUserObj["phoneNumber"] = phoneNumber;
-    //defult velues
-    jsonNewUserObj["currentBooks"] = "no books";//will be changed with a custom arrary of books :: ??
+
+    QJsonArray bookArray;
+    QJsonObject book;
+    book["bookID"];
+    book["checkoutDate"];
+    bookArray.append(book);
+
+    jsonNewUserObj["currentBooks"] = bookArray;//will be changed with a custom arrary of books :: ??
     jsonNewUserObj["over-dueBooks"] = "no over-due";
 
     // Write to json file
