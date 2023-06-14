@@ -60,6 +60,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="pushButton_Catagoryes">
+           <property name="text">
+            <string>Catagorys</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="pushButton_backToMenu">
            <property name="text">
             <string>Back</string>

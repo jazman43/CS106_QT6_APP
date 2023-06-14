@@ -24,14 +24,14 @@ void editBooks::on_pushButton_findID_clicked()
     // Get the book information
     QString bookTitle = selectedID["title"].toString();
     QString author = selectedID["author"].toString();
-    QString genere = selectedID["genre"].toString();
+    int genere = selectedID["genre"].toInt();
     QString year = selectedID["year"].toString();
     QString discripsion = selectedID["discripsion"].toString();
 
     // Set the book information
     ui->lineEdit_title->setText(bookTitle);
     ui->lineEdit_author->setText(author);
-    ui->lineEdit_genre->setText(genere);
+    ui->comboBox_Genere->setCurrentIndex(genere);
     ui->lineEdit_Year->setText(year);
     ui->textEdit_discripsion->setPlainText(discripsion);
 }
@@ -43,7 +43,7 @@ void editBooks::on_pushButton_saveNewBook_clicked()
     int id = ui->lineEdit_findId->text().toInt();
     QString bookTitle = ui->lineEdit_title->text();
     QString author = ui->lineEdit_author->text();
-    QString genere = ui->lineEdit_genre->text();
+    int genere = ui->comboBox_Genere->currentIndex();
     QString year  = ui->lineEdit_Year->text();
     QString discripsion = ui->textEdit_discripsion->toPlainText();
 
@@ -51,6 +51,7 @@ void editBooks::on_pushButton_saveNewBook_clicked()
     if(files.modifyJson(files.filePathBooks,"title",bookTitle,id))
     {
         // What is this ?
+
     }
     // Modify the book information
     files.modifyJson(files.filePathBooks,"author",author,id);

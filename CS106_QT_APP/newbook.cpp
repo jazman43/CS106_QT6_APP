@@ -24,9 +24,10 @@ void newBook::on_pushButton_saveNewBook_clicked()
     // Get the book information
     QString bookTitle = ui->lineEdit_title->text();
     QString author = ui->lineEdit_author->text();
-    QString genere = ui->lineEdit_genre->text();
+    int genere = ui->comboBox_Genere->currentIndex();
     QString year = ui->lineEdit_Year->text();
     QString discripsion = ui->textEdit_discripsion->toPlainText();
+
 
     // Set the book information
     QJsonObject jsonNewUserObj;

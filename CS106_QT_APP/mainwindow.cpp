@@ -4,6 +4,8 @@
 #include <QDebug>
 #include "./H_files/userdata.h"
 #include "./H_files/bookdata.h"
+#include <QScrollArea>
+
 
 #include <QMessageBox>
 
@@ -27,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     //set frist Home sreen as guest
     stackedWidget->setCurrentIndex(1);
 
-
+    booksDisplay();
 
     connect(signinWindow, &Signin::userChecked, this, &MainWindow::loginCheck);
 
@@ -196,8 +198,6 @@ void MainWindow::on_pushButton_StaffSignOut_clicked()
 
 
 
-
-
 void MainWindow::on_navAccount_guest_clicked(bool checked)//guess Account DropDown menu
 {
 
@@ -231,4 +231,37 @@ void MainWindow::on_navAccount_Staff_clicked(bool checked)//staff Account DropDo
     }
 }
 
+void MainWindow::booksDisplay()
+{
+    QStringList headerLabels;
+
+    QJsonObject jsonCategory = files.readFromJson(files.filePathCategory);
+    QJsonArray jsonCategoryDataArray = jsonCategory.contains("data") ? jsonCategory["data"].toArray() : QJsonArray();
+
+
+    int rowCount = jsonCategoryDataArray.size();
+
+    ui->tableWidget_BookDisplay->setRowCount(rowCount);
+
+
+    for(int i = 0; i < rowCount; ++i)
+    {
+        QJsonObject object = jsonCategoryDataArray[i].toObject();
+
+
+        QString categoryName = object["categoryName"].toString();
+
+        headerLabels << categoryName;
+
+    }
+
+
+    ui->tableWidget_BookDisplay->setVerticalHeaderLabels(headerLabels);
+
+}
+
+void MainWindow::on_tableWidget_BookDisplay_cellClicked(int row, int column)
+{
+
+}
 

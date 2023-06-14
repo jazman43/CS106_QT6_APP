@@ -439,6 +439,82 @@ info@library.nz
        </property>
       </widget>
      </widget>
+     <widget class="QFrame" name="Account_MemberHome_2">
+      <property name="geometry">
+       <rect>
+        <x>630</x>
+        <y>50</y>
+        <width>181</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame
+{
+	background-color: rgba(0, 0, 0,80);
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>15</number>
+      </property>
+      <property name="midLineWidth">
+       <number>10</number>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget_3">
+       <property name="geometry">
+        <rect>
+         <x>-1</x>
+         <y>-1</y>
+         <width>181</width>
+         <height>131</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
+        <property name="topMargin">
+         <number>10</number>
+        </property>
+        <property name="rightMargin">
+         <number>10</number>
+        </property>
+        <property name="bottomMargin">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="pushButton_memberAccountSettings">
+          <property name="text">
+           <string>Account</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_MemberBooks">
+          <property name="text">
+           <string>Books</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_MemberSignOut_2">
+          <property name="text">
+           <string>Sign out</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </widget>
     <widget class="QWidget" name="GuestHome">
      <widget class="QFrame" name="CentralContent">
@@ -456,26 +532,45 @@ info@library.nz
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="panelLeft_aboutus_2">
+      <widget class="QTableWidget" name="tableWidget_BookDisplay">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>10</y>
-         <width>161</width>
-         <height>20</height>
+         <x>-5</x>
+         <y>1</y>
+         <width>421</width>
+         <height>381</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <bold>true</bold>
-        </font>
+       <property name="rowCount">
+        <number>2</number>
        </property>
-       <property name="text">
-        <string>Book Highlights</string>
+       <property name="columnCount">
+        <number>1</number>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="horizontalHeaderMinimumSectionSize">
+        <number>34</number>
+       </attribute>
+       <attribute name="horizontalHeaderDefaultSectionSize">
+        <number>200</number>
+       </attribute>
+       <attribute name="horizontalHeaderHighlightSections">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderDefaultSectionSize">
+        <number>60</number>
+       </attribute>
+       <attribute name="verticalHeaderHighlightSections">
+        <bool>false</bool>
+       </attribute>
+       <row/>
+       <row/>
+       <column/>
       </widget>
      </widget>
      <widget class="QWidget" name="PanelRight" native="true">
@@ -836,8 +931,17 @@ info@library.nz
         <x>620</x>
         <y>50</y>
         <width>171</width>
-        <height>31</height>
+        <height>41</height>
        </rect>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame
+{
+	background-color: rgba(0, 0, 0,80);
+}</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -851,10 +955,22 @@ info@library.nz
          <x>-1</x>
          <y>0</y>
          <width>171</width>
-         <height>31</height>
+         <height>44</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
+        <property name="topMargin">
+         <number>10</number>
+        </property>
+        <property name="rightMargin">
+         <number>10</number>
+        </property>
+        <property name="bottomMargin">
+         <number>10</number>
+        </property>
         <item>
          <widget class="QPushButton" name="pushButton_guestSignIn">
           <property name="text">
@@ -1291,11 +1407,26 @@ info@library.nz
         <height>131</height>
        </rect>
       </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame
+{
+	background-color: rgba(0, 0, 0,80);
+}</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>15</number>
+      </property>
+      <property name="midLineWidth">
+       <number>10</number>
       </property>
       <widget class="QWidget" name="verticalLayoutWidget_2">
        <property name="geometry">
@@ -1307,6 +1438,18 @@ info@library.nz
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
+        <property name="topMargin">
+         <number>10</number>
+        </property>
+        <property name="rightMargin">
+         <number>10</number>
+        </property>
+        <property name="bottomMargin">
+         <number>10</number>
+        </property>
         <item>
          <widget class="QPushButton" name="pushButton_StaffUsersEdit">
           <property name="text">

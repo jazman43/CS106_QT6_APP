@@ -226,7 +226,7 @@ bool fileManagement::deleteJsonElement(const QString& filePath, const int& objec
 
 }
 
-// Check if file by ID / exists
+//finds last id of an json object and returns it with one added
 int fileManagement::checkFileID(const QString& filePath, const QString& key)
 {
     int  maxId = 1;
@@ -281,7 +281,7 @@ QJsonObject fileManagement::selectObjectByID(const QString& filePath, int id)
     return QJsonObject();
 }
 
-// Select object by ID
+// checks if fine exists
 bool fileManagement::checkFileExists(const QString& filePath)
 {
     QFile checkFile(filePath);
