@@ -130,7 +130,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="textEdit_discripsion"/>
+       <widget class="QTextEdit" name="textEdit_description"/>
       </item>
      </layout>
     </item>

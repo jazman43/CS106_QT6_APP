@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>401</width>
-     <height>288</height>
+     <height>328</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -89,7 +89,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox_Genere">
+       <widget class="QComboBox" name="comboBox_Genre">
         <property name="minimumSize">
          <size>
           <width>170</width>
@@ -98,7 +98,7 @@
         </property>
         <item>
          <property name="text">
-          <string>Catagorys</string>
+          <string>Categories</string>
          </property>
         </item>
        </widget>
@@ -146,12 +146,12 @@
       <item>
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Discripsion:</string>
+         <string>Description:</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="textEdit_discripsion"/>
+       <widget class="QTextEdit" name="textEdit_description"/>
       </item>
      </layout>
     </item>

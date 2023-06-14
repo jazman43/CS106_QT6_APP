@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     //find stacked widgets
     stackedWidget = findChild<QStackedWidget*>("stackedWidget");
 
-    //set frist Home sreen as guest
+    //set first Home screen as guest
     stackedWidget->setCurrentIndex(1);
 
     booksDisplay();
@@ -77,18 +77,18 @@ void MainWindow::loginCheck()
         {
             QJsonObject object = jsonUserDataArray[i].toObject();
 
-            QString userName = object["userName"].toString();
+            QString username = object["username"].toString();
             QString password = object["password"].toString();
 
-            if (userName == "Admin" && password == "Admin")
+            if (username == "Admin" && password == "Admin")
             {
-                QMessageBox::warning(this, "Change Password", "Please change the default password for the admin user.");
+                QMessageBox::warning(this, "Change Password", "Please set a new password for the Admin user.");
             }
 
 
-            if (userName == signinWindow->getUsername() && password == signinWindow->getPassword())
+            if (username == signinWindow->getUsername() && password == signinWindow->getPassword())
             {
-                loggedInUsername = userName;
+                loggedInUsername = username;
                 break;
             }
         }
@@ -110,13 +110,13 @@ void MainWindow::defaultAdminUser()
 {
     QJsonObject jsonNewUserObj;
 
-    jsonNewUserObj["userName"] = "Admin";
+    jsonNewUserObj["username"] = "Admin";
     jsonNewUserObj["password"] = "Admin";
     jsonNewUserObj["isAdmin"] = true;
     jsonNewUserObj["address"] = "";
     jsonNewUserObj["id"] = 1;
     jsonNewUserObj["phoneNumber"] = "";
-    //defult velues
+    //default values
     jsonNewUserObj["currentBooks"] = "no books";//will be changed with a custom arrary of books
     jsonNewUserObj["over-dueBooks"] = "no over-due";
 
@@ -182,7 +182,7 @@ void MainWindow::on_pushButton_StaffSignOut_clicked()
 
 
             int id = object["id"].toInt();
-            QString currentUsername = object["userName"].toString();
+            QString currentUsername = object["username"].toString();
 
             files.deleteJsonElement(files.filePathCurrentUser,id);
 
@@ -198,7 +198,7 @@ void MainWindow::on_pushButton_StaffSignOut_clicked()
 
 
 
-void MainWindow::on_navAccount_guest_clicked(bool checked)//guess Account DropDown menu
+void MainWindow::on_navAccount_guest_clicked(bool checked)//guest Account DropDown menu
 {
 
     isGuestFrameVisible = !isGuestFrameVisible;

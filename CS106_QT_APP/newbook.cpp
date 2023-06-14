@@ -26,25 +26,27 @@ void newBook::on_pushButton_saveNewBook_clicked()
     // Get the book information
     QString bookTitle = ui->lineEdit_title->text();
     QString author = ui->lineEdit_author->text();
-    int genere = ui->comboBox_Genere->currentIndex();
+    int genre = ui->comboBox_Genere->currentIndex();
     QString year = ui->lineEdit_Year->text();
-    QString discripsion = ui->textEdit_discripsion->toPlainText();
+    QString description = ui->textEdit_description->toPlainText();
 
     bool isCheckedOut = false;
     bool isReaeved = false;
     int memberID = NULL;
 
     // Set the book information
-    QJsonObject jsonNewBookObj;
-    jsonNewBookObj["title"] = bookTitle;
-    jsonNewBookObj["author"] = author;
-    jsonNewBookObj["genre"] = genere;
-    jsonNewBookObj["year"] = year;
-    jsonNewBookObj["id"] = files.checkFileID(files.filePathBooks, "id");
-    jsonNewBookObj["discripsion"] = discripsion;
+
+    QJsonObject jsonNewUserObj;
+    jsonNewUserObj["title"] = bookTitle;
+    jsonNewUserObj["author"] = author;
+    jsonNewUserObj["genre"] = genre;
+    jsonNewUserObj["year"] = year;
+    jsonNewUserObj["id"] = fileManager.checkFileID(fileManager.filePathBooks, "id");
+    jsonNewUserObj["description"] = description;
     jsonNewBookObj["isCheckOut"] = isCheckedOut;
     jsonNewBookObj["isReserved"] = isReaeved;
     jsonNewBookObj["memberID"] = memberID;
+
 
     // Write to json file
     if(files.writeToJson(files.filePathBooks ,jsonNewBookObj, 1))

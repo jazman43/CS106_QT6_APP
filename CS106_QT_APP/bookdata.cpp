@@ -44,7 +44,7 @@ void bookData::onNewBookAdded() // onNewBookAdded():
 
     // set up the table
     ui->tableWidget->setColumnCount(6);
-    ui->tableWidget->setHorizontalHeaderLabels({"Title","Author" ,"genere","year","ID","Discripsion"});
+    ui->tableWidget->setHorizontalHeaderLabels({"Title","Author" ,"Genre","Year","ID","Description"});
     ui->tableWidget->setRowCount(rowCount);
 
     // Set table data
@@ -79,7 +79,7 @@ void bookData::onNewBookAdded() // onNewBookAdded():
 
         QString year = object["year"].toString();
         QString id = QString::number(object["id"].toInt());
-        QString discripsion = object["discripsion"].toString();
+        QString description = object["description"].toString();
 
         // set the book data to the table
         QTableWidgetItem *item1 = new QTableWidgetItem(bookTitle);
@@ -87,7 +87,7 @@ void bookData::onNewBookAdded() // onNewBookAdded():
         QTableWidgetItem *item3 = new QTableWidgetItem(genereName);
         QTableWidgetItem *item4 = new QTableWidgetItem(year);
         QTableWidgetItem *item5 = new QTableWidgetItem(id);
-        QTableWidgetItem *item6 = new QTableWidgetItem(discripsion);
+        QTableWidgetItem *item6 = new QTableWidgetItem(description);
 
         // add the book data to the table
         ui->tableWidget->setItem(i, 0, item1);
