@@ -24,19 +24,19 @@ void newBook::on_pushButton_saveNewBook_clicked()
     // Get the book information
     QString bookTitle = ui->lineEdit_title->text();
     QString author = ui->lineEdit_author->text();
-    int genere = ui->comboBox_Genere->currentIndex();
+    int genre = ui->comboBox_Genere->currentIndex();
     QString year = ui->lineEdit_Year->text();
-    QString discripsion = ui->textEdit_discripsion->toPlainText();
+    QString description = ui->textEdit_description->toPlainText();
 
 
     // Set the book information
     QJsonObject jsonNewUserObj;
     jsonNewUserObj["title"] = bookTitle;
     jsonNewUserObj["author"] = author;
-    jsonNewUserObj["genre"] = genere;
+    jsonNewUserObj["genre"] = genre;
     jsonNewUserObj["year"] = year;
     jsonNewUserObj["id"] = fileManager.checkFileID(fileManager.filePathBooks, "id");
-    jsonNewUserObj["discripsion"] = discripsion;
+    jsonNewUserObj["description"] = description;
 
     // Write to json file
     if(fileManager.writeToJson(fileManager.filePathBooks ,jsonNewUserObj, 1))

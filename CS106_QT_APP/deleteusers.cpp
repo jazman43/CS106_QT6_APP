@@ -28,7 +28,7 @@ void deleteUsers::on_pushButton_findUserID_clicked()
 {
     QString id = ui->lineEdit_findUserID->text();
     QJsonObject selectedID = files.selectObjectByID(files.filePathMemberData, id.toInt());
-    QString userName = selectedID["userName"].toString();
+    QString userName = selectedID["username"].toString();
 
     ui->lineEdit_name->setText(userName);
 }
