@@ -1,5 +1,6 @@
 #include "./H_files/edituser.h"
 #include "./UI_files/ui_edituser.h"
+#include <QMessageBox>
 
 // Create QWidget editUser
 editUser::editUser(QWidget *parent) :
@@ -19,20 +20,26 @@ editUser::~editUser()
 void editUser::on_pushButton_find_ID_clicked()
 {
     // Get the book information
-    QString id = ui->lineEdit_find_ID->text();
-    QJsonObject selectedID = files.selectObjectByID(files.filePathMemberData, id.toInt());
+    int id = ui->lineEdit_find_ID->text().toInt();
+    QJsonObject selectedID = files.selectObjectByID(files.filePathMemberData, id);
 
-    // Get the book information
-    QString username = selectedID["username"].toString();
-    QString password = selectedID["password"].toString();
-    QString address = selectedID["address"].toString();
-    QString phonenumber = selectedID["phonenumber"].toString();
 
-    // Set the book information
-    ui->lineEdit_name->setText(username);
-    ui->lineEdit_password->setText(password);
-    ui->lineEdit_address->setText(address);
-    ui->lineEdit_number->setText(phonenumber);
+    if (!selectedID.isEmpty()) {
+       // Get the book information
+      QString username = selectedID["username"].toString();
+      QString password = selectedID["password"].toString();
+      QString address = selectedID["address"].toString();
+      QString phonenumber = selectedID["phonenumber"].toString();
+  
+      // Set the book information
+      ui->lineEdit_name->setText(username);
+      ui->lineEdit_password->setText(password);
+      ui->lineEdit_address->setText(address);
+      ui->lineEdit_number->setText(phonenumber);
+    } else {
+        QMessageBox::warning(this, "Error", "User not found.");
+    }
+
 }
 
 // Save the new user information
@@ -45,6 +52,8 @@ void editUser::on_pushButton_save_changes_clicked()
     QString address = ui->lineEdit_address->text();
     QString phonenumber = ui->lineEdit_number->text();
 
+
+
     // Modify the user information
     if(files.modifyJson(files.filePathMemberData,"username",username,id))
     {
@@ -54,5 +63,10 @@ void editUser::on_pushButton_save_changes_clicked()
     files.modifyJson(files.filePathMemberData,"password",password,id);
     files.modifyJson(files.filePathMemberData,"address",address,id);
     files.modifyJson(files.filePathMemberData,"phonenumber",phonenumber,id);
+
+    emit userModify();
+
+    accept();
+
 }
 

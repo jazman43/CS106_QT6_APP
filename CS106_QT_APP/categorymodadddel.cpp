@@ -1,5 +1,7 @@
 #include "./H_files/categorymodadddel.h"
 #include "./UI_files/ui_categorymodadddel.h"
+#include <QMessageBox>
+#include <QDebug>
 
 categoryModAddDel::categoryModAddDel(QWidget *parent) :
     QDialog(parent),
@@ -46,10 +48,13 @@ void categoryModAddDel::on_pushButton_AddNewCategory_clicked()
 
 
     // Write to json file
-    if(files.writeToJson(files.filePathCategory ,jsonNewCategoryObj, 1))
+    if(!files.writeToJson(files.filePathCategory ,jsonNewCategoryObj, 1))
     {
-        accept();
+
+        qDebug() << "File Error, Unable To Write to Category file";
     }
+
+    accept();
 }
 
 
@@ -70,10 +75,10 @@ void categoryModAddDel::on_pushButton_Savemod_clicked()
     QString categoryName = ui->lineEdit_categoryNameMod->text();
 
     // Modify the category name
-    if(files.modifyJson(files.filePathCategory,"categoryName",categoryName,id))
+    if(!files.modifyJson(files.filePathCategory,"categoryName",categoryName,id))
     {
-        // What is this ?
 
+       qDebug() << "File Error, Unable To Write to Category file";
     }
 
     accept();

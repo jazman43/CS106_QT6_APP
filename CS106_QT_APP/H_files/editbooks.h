@@ -26,6 +26,8 @@ private:
 
     fileManagement files;
 
+    void addCategorys();
+
 signals:
 
     void modifyedBook();

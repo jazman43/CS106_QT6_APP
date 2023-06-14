@@ -7,6 +7,8 @@ editBooks::editBooks(QWidget *parent) :
     ui(new Ui::editBooks)
 {
     ui->setupUi(this);
+
+    addCategorys();
 }
 
 // Delete QWidget editBooks
@@ -64,3 +66,19 @@ void editBooks::on_pushButton_saveNewBook_clicked()
     accept();
 }
 
+void editBooks::addCategorys()
+{
+    QJsonObject categoryObject = files.readFromJson(files.filePathCategory);
+    QJsonArray jsonCategoryObjectArray = categoryObject.contains("data") ? categoryObject["data"].toArray() : QJsonArray();
+
+    int rowCount = jsonCategoryObjectArray.size();
+
+    for(int i = 0; i < rowCount;i++)
+    {
+        QJsonObject object = jsonCategoryObjectArray[i].toObject();
+
+        QString categoryName = object["categoryName"].toString();
+
+        ui->comboBox_Genere->addItem(categoryName);
+    }
+}
