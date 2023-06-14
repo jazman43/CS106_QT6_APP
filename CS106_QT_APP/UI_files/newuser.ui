@@ -112,7 +112,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_phoneNumber"/>
+       <widget class="QLineEdit" name="lineEdit_phonenumber"/>
       </item>
      </layout>
     </item>
