@@ -70,7 +70,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_pasword"/>
+       <widget class="QLineEdit" name="lineEdit_password"/>
       </item>
      </layout>
     </item>

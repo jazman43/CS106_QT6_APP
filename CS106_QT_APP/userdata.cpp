@@ -77,7 +77,7 @@ void userData::loadUserDataTable()
 
     // Set table column and row count
     ui->tableWidget->setColumnCount(9);
-    ui->tableWidget->setHorizontalHeaderLabels({"user name","parssword" ,"is Admin","address","ID","phone number" ,"current Books","Over-Due books", "start date"});
+    ui->tableWidget->setHorizontalHeaderLabels({"user name","password" ,"is Admin","address","ID","phone number" ,"current Books","Over-Due books", "start date"});
     ui->tableWidget->setRowCount(rowCount);
 
     // Set table data
@@ -141,7 +141,7 @@ void userData::defaultAdminUser()
     jsonNewUserObj["address"] = "";
     jsonNewUserObj["id"] = 1;
     jsonNewUserObj["phoneNumber"] = "";
-    //defult velues
+    //default values
     jsonNewUserObj["currentBooks"] = "no books";//will be changed with a custom arrary of books
     jsonNewUserObj["over-dueBooks"] = "no over-due";
 

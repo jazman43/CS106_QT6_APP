@@ -24,16 +24,16 @@ void editBooks::on_pushButton_findID_clicked()
     // Get the book information
     QString bookTitle = selectedID["title"].toString();
     QString author = selectedID["author"].toString();
-    int genere = selectedID["genre"].toInt();
+    int genre = selectedID["genre"].toInt();
     QString year = selectedID["year"].toString();
-    QString discripsion = selectedID["discripsion"].toString();
+    QString description = selectedID["description"].toString();
 
     // Set the book information
     ui->lineEdit_title->setText(bookTitle);
     ui->lineEdit_author->setText(author);
-    ui->comboBox_Genere->setCurrentIndex(genere);
+    ui->comboBox_Genre->setCurrentIndex(genre);
     ui->lineEdit_Year->setText(year);
-    ui->textEdit_discripsion->setPlainText(discripsion);
+    ui->textEdit_description->setPlainText(description);
 }
 
 // Save the new book information
@@ -43,9 +43,9 @@ void editBooks::on_pushButton_saveNewBook_clicked()
     int id = ui->lineEdit_findId->text().toInt();
     QString bookTitle = ui->lineEdit_title->text();
     QString author = ui->lineEdit_author->text();
-    int genere = ui->comboBox_Genere->currentIndex();
+    int genre = ui->comboBox_Genre->currentIndex();
     QString year  = ui->lineEdit_Year->text();
-    QString discripsion = ui->textEdit_discripsion->toPlainText();
+    QString description = ui->textEdit_description->toPlainText();
 
     // Modify the book information
     if(files.modifyJson(files.filePathBooks,"title",bookTitle,id))
@@ -55,9 +55,9 @@ void editBooks::on_pushButton_saveNewBook_clicked()
     }
     // Modify the book information
     files.modifyJson(files.filePathBooks,"author",author,id);
-    files.modifyJson(files.filePathBooks,"genre",genere,id);
+    files.modifyJson(files.filePathBooks,"genre",genre,id);
     files.modifyJson(files.filePathBooks,"year",year,id);
-    files.modifyJson(files.filePathBooks,"discripsion",discripsion,id);
+    files.modifyJson(files.filePathBooks,"description",description,id);
 
     emit modifyedBook();
 

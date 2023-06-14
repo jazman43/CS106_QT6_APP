@@ -75,7 +75,7 @@ void Signin::on_pushButton_StaffLogin_clicked()
     // If user not found then display message box
     if(!userFound)
     {
-        QMessageBox::warning(this, "Staff signin", "Staff does not esest or Incorrect ID/password inputted");
+        QMessageBox::warning(this, "Staff signin", "Staff does not exist or invalid ID/password entered");
     }
 }
 
@@ -122,7 +122,7 @@ void Signin::on_pushButton_memberLogin_clicked()
     }
     if(!userFound)
     {
-        QMessageBox::warning(this, "Member signin", "Member does not esest or Incorrect ID inputted");
+        QMessageBox::warning(this, "Member signin", "Member does not exist or invalid ID entered");
     }
 }
 

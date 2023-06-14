@@ -46,7 +46,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_modfiyBook">
+          <widget class="QPushButton" name="pushButton_modifyBook">
            <property name="text">
             <string>Edit</string>
            </property>
@@ -62,7 +62,7 @@
          <item>
           <widget class="QPushButton" name="pushButton_Catagoryes">
            <property name="text">
-            <string>Catagorys</string>
+            <string>Categories</string>
            </property>
           </widget>
          </item>

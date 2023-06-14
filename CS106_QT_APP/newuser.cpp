@@ -22,21 +22,21 @@ void newUser::on_buttonBox_accepted()
     fileManagement fileManager;
 
     // Get the user information
-    QString userName = ui->lineEdit_name->text();
-    QString password = ui->lineEdit_pasword->text();
+    QString username = ui->lineEdit_name->text();
+    QString password = ui->lineEdit_password->text();
     QString isAdmin = ui->lineEdit_isAdmin->text();
     QString address = ui->lineEdit_address->text();
     QString phoneNumber = ui->lineEdit_phoneNumber->text();
 
     // Set the user information
     QJsonObject jsonNewUserObj;
-    jsonNewUserObj["userName"] = userName;
+    jsonNewUserObj["username"] = username;
     jsonNewUserObj["password"] = password;
     jsonNewUserObj["isAdmin"] = isAdmin;
     jsonNewUserObj["address"] = address;
     jsonNewUserObj["id"] = fileManager.checkFileID(fileManager.filePathMemberData, "id");
     jsonNewUserObj["phoneNumber"] = phoneNumber;
-    //defult velues
+    //default values
     jsonNewUserObj["currentBooks"] = "no books";//will be changed with a custom arrary of books :: ??
     jsonNewUserObj["over-dueBooks"] = "no over-due";
 
