@@ -77,7 +77,14 @@ private:
     bool isStaffNotificationFrameVisible = false;
     bool isMemberNotificationFrameVisible = false;
 
+
+    QList<QPair<QString, QString>> searchResults;
+
     bool isMemberWishlistFrameVisible = false;
+<<<<<<< HEAD
+=======
+
+>>>>>>> f88e78dc4799d1f5494720a2a520113cbd7238ba
 
     QList<QPair<QString, QString>> searchResults;
 
