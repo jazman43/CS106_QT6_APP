@@ -462,7 +462,7 @@ info@library.nz
        </rect>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="Notification_MemberHome">
        <widget class="QFrame" name="frame_Notification_MemberHome">
@@ -571,7 +571,7 @@ info@library.nz
        </widget>
       </widget>
       <widget class="QWidget" name="Wishlist_MemberHome">
-       <widget class="QTableWidget" name="table_Wishlist_MemberHome">
+       <widget class="QFrame" name="frameWishlist_MemberHome">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -580,6 +580,22 @@ info@library.nz
           <height>381</height>
          </rect>
         </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QTableWidget" name="table_Wishlist_MemberHome">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>181</width>
+           <height>381</height>
+          </rect>
+         </property>
+        </widget>
        </widget>
       </widget>
      </widget>
