@@ -45,6 +45,8 @@ private slots:
 
     void on_tableWidget_BookDisplay_cellClicked(int row, int column);
 
+    void on_navSearch_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
 
@@ -57,17 +59,13 @@ private:
 
     Signin* signinWindow = new Signin();
 
-    void defaultAdminUser();
 
-    void logout();
 
     bool isGuestFrameVisible = false;
     bool isStaffFrameVisible = false;
 
+    QList<QPair<QString, QString>> searchResults;
 
-    void checkBookOut();
-
-    void returnBook(int userId, int bookId);
 
     //home page Indexs
     int memberIndex = 0;
@@ -76,6 +74,14 @@ private:
 
 
     void loadCurrentUser();
+    void defaultAdminUser();
+    void logout();
+
+    void clearCurrentBook();
+    void returnBook(int userId, int bookId);
+    void searchBooks(const QString& searchText);
+    QString getCategoryName(int categoryID);
+
 signals:
     void homeWindowHidden();
 };
