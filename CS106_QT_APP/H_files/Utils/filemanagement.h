@@ -43,6 +43,8 @@ public:
 
     QString filePathCategory = "./BookCategorys.json";
 
+    QString filePathCurrentBook = "./CurrentBook.json";
+
 private:
 
 
