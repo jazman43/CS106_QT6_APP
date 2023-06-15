@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this); // set up ui
 
     // Sign out any signed in users
+
     logout(); //call the logout function
 
     //hide Account Drop Down Menus
@@ -47,7 +48,6 @@ MainWindow::~MainWindow()
 // Guest Sign In
 void MainWindow::loginCheck()
 {
-
     QJsonObject jsonCurrentUser = files.readFromJson(files.filePathCurrentUser); // read current user file
 
     QJsonObject jsonUserData = files.readFromJson(files.filePathMemberData); // read user data file
@@ -56,7 +56,7 @@ void MainWindow::loginCheck()
 
     if(signinWindow->staffLoggedOn && !jsonCurrentUser.empty()) // if staff is logged on
     {
-        stackedWidget->setCurrentIndex(2); // admin is logged in
+        stackedWidget->setCurrentIndex(2); // Admin Home page
 
         QString loggedInUsername; // set logged in username to empty string
 
@@ -79,9 +79,12 @@ void MainWindow::loginCheck()
         }
 
         currentUser = loggedInUsername;
+    } else if (!signinWindow->staffLoggedOn && !jsonCurrentUser.empty())
+    {
+        stackedWidget->setCurrentIndex(0); // Member home page
     } else
     {
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(1); // Guest home page
     }
 }
 
@@ -94,20 +97,43 @@ void MainWindow::defaultAdminUser() // create default admin user
     jsonNewUserObj["address"] = "";
     jsonNewUserObj["id"] = 1;
     jsonNewUserObj["phoneNumber"] = "";
-    jsonNewUserObj["currentBooks"] = "no books";//will be changed with a custom arrary of books
+    jsonNewUserObj["currentBooks"] = "no books"; // will be changed with a custom arrary of books
     jsonNewUserObj["over-dueBooks"] = "no over-due";
 
     if(files.writeToJson(files.filePathMemberData ,jsonNewUserObj, 1))
     {
-        //qDebug() << "Admin User Created";
+        qDebug() << "Admin User Created";
     }
 
 }
 
 void MainWindow::onHomeWindowHidden()
 {
-    loginCheck();
-    show();
+    loginCheck(); // check if user is logged in
+    show(); // show main window
+
+    QJsonObject jsonUserData = files.readFromJson(files.filePathMemberData); // read user data file
+    QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray(); // get array of data from user json file
+    int rowCount = jsonUserDataArray.size(); // get number of rows in user data file
+
+    for (int i = 0; i < rowCount; i++) // loop through user data file
+    {
+        QJsonObject object = jsonUserDataArray[i].toObject(); // get object at index i
+        QString username = object["username"].toString(); // get username from object
+    }
+
+    if (currentUser == "Admin") // check if current user is member, guest or staff
+    {
+        //output is admin
+        qDebug() << "Current User: " << currentUser;
+        QMessageBox::information(this, "Logged In", "You are logged in as Admin");
+    } else {
+        //output is guest
+        qDebug() << "Current User: " << currentUser;
+        QMessageBox::information(this, "Logged In", "You are logged in as Guest");
+        stackedWidget->setCurrentIndex(1);
+    }
+
 }
 
 void MainWindow::on_pushButton_guestSignIn_clicked()
@@ -133,9 +159,8 @@ void MainWindow::on_pushButton_StaffBooksEdit_clicked()
 void MainWindow::on_pushButton_StaffSignOut_clicked()
 {
     logout();
-    stackedWidget->setCurrentIndex(0);
-    // output which stacked widget is currently active
-    qDebug() << "Current Stacked Widget: " << stackedWidget->currentIndex();
+    stackedWidget->setCurrentIndex(1);
+    qDebug() << "Current Stacked Widget: " << stackedWidget->currentIndex(); // output which stacked widget is currently active
 }
 
 // Log Out - Staff
@@ -152,7 +177,7 @@ void MainWindow::logout()
             QJsonObject object = jsonUserDataArray[i].toObject();
 
             int id = object["id"].toInt();
-            QString currentUsername = object["username"].toString();
+            QString currentUsername = object["userName"].toString();
 
             files.deleteJsonElement(files.filePathCurrentUser,id);
 
