@@ -506,7 +506,7 @@ info@library.nz
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_MemberSignOut_2">
+         <widget class="QPushButton" name="pushButton_MemberSignOut">
           <property name="text">
            <string>Sign out</string>
           </property>
