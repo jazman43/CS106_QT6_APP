@@ -171,7 +171,7 @@ void MainWindow::on_pushButton_MemberSignOut_clicked()
     qDebug() << "Current Stacked Widget: " << stackedWidget->currentIndex(); // output which stacked widget is currently active
 }
 
-// Log Out - Staff
+// Log Out
 void MainWindow::logout()
 {
     QJsonObject currentJsonUserObj = files.readFromJson(files.filePathCurrentUser);
