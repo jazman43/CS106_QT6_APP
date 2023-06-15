@@ -21,7 +21,6 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void login();
     void loginCheck();
 
     void onHomeWindowHidden();
@@ -58,6 +57,8 @@ private:
     Signin* signinWindow = new Signin();
 
     void defaultAdminUser();
+
+    void logout();
 
     bool isGuestFrameVisible = false;
     bool isStaffFrameVisible = false;

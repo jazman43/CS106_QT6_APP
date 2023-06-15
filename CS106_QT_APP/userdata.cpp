@@ -62,7 +62,7 @@ void userData::on_pushButton_deleteUser_clicked()
 void userData::on_pushButton_backToMenu_clicked()
 {
     MainWindow* adminMenu = new MainWindow();
-    emit adminMenu->homeWindowHidden();
+    emit adminMenu->homeWindowHidden(); // emit signal to show main window
     this->hide();
 }
 
@@ -76,7 +76,7 @@ void userData::loadUserDataTable()
 
     // Set table column and row count
     ui->tableWidget->setColumnCount(9);
-    ui->tableWidget->setHorizontalHeaderLabels({"user name","password" ,"is Admin","address","ID","phone number" ,"current Books","Over-Due books", "start date"});
+    ui->tableWidget->setHorizontalHeaderLabels({"username","password" ,"is Admin","address","ID","phone number" ,"current Books","Over-Due books", "start date"});
     ui->tableWidget->setRowCount(rowCount);
 
     // Set table data
