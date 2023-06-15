@@ -22,6 +22,7 @@ public:
 
     QString getUsername();
     QString getPassword();
+    int getId();
 
 private slots:
 
@@ -36,7 +37,7 @@ private:
 
     QString currentUserPass;
     QString currentUserName;
-
+    int currentuserid;
 
 signals:
 

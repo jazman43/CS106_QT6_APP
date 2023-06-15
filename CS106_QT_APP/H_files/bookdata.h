@@ -18,15 +18,15 @@ public:
     ~bookData();
 
 private slots:
-    void on_pushButton_newBook_clicked();
-
-    void on_pushButton_modfiyBook_clicked();
+    void on_pushButton_newBook_clicked();    
 
     void on_pushButton_deleteBook_clicked();
 
     void on_pushButton_backToMenu_clicked();
 
     void on_pushButton_Catagoryes_clicked();
+
+    void on_pushButton_modifyBook_clicked();
 
 private:
     Ui::bookData *ui;

@@ -16,15 +16,21 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this); // set up ui
 
     // Sign out any signed in users
+    QJsonObject usersLoggedIn = files.readFromJson(files.filePathCurrentUser);
 
-    logout(); //call the logout function
+    if(usersLoggedIn.empty())
+    {
+        logout(); //call the logout function
+        qDebug() << "All previous user sessions logged out";
+    }
+
 
     //hide Account Drop Down Menus
     ui->account_dropDown_guestHome->hide();
     ui->Account_StaffHome->hide();
 
     stackedWidget = findChild<QStackedWidget*>("stackedWidget"); // find stacked widgets
-    stackedWidget->setCurrentIndex(1); // set first Home screen as guest
+    stackedWidget->setCurrentIndex(guestIndex); // set first Home screen as guest
 
     booksDisplay();
 
@@ -37,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     connect(this, &MainWindow::homeWindowHidden, this, &MainWindow::onHomeWindowHidden);
+
+    loadCurrentUser();
 
 }
 
@@ -56,7 +64,7 @@ void MainWindow::loginCheck()
 
     if(signinWindow->staffLoggedOn && !jsonCurrentUser.empty()) // if staff is logged on
     {
-        stackedWidget->setCurrentIndex(2); // Admin Home page
+        stackedWidget->setCurrentIndex(staffIndex); // Admin Home page
 
         QString loggedInUsername; // set logged in username to empty string
 
@@ -81,10 +89,10 @@ void MainWindow::loginCheck()
         currentUser = loggedInUsername;
     } else if (!signinWindow->staffLoggedOn && !jsonCurrentUser.empty())
     {
-        stackedWidget->setCurrentIndex(0); // Member home page
+        stackedWidget->setCurrentIndex(memberIndex); // Member home page
     } else
     {
-        stackedWidget->setCurrentIndex(1); // Guest home page
+        stackedWidget->setCurrentIndex(guestIndex); // Guest home page
     }
 }
 
@@ -109,6 +117,7 @@ void MainWindow::defaultAdminUser() // create default admin user
 
 void MainWindow::onHomeWindowHidden()
 {
+    loadCurrentUser();
     loginCheck(); // check if user is logged in
     show(); // show main window
 
@@ -120,20 +129,27 @@ void MainWindow::onHomeWindowHidden()
     {
         QJsonObject object = jsonUserDataArray[i].toObject(); // get object at index i
         QString username = object["username"].toString(); // get username from object
-    }
 
-    if (currentUser == "Admin") // check if current user is member, guest or staff
-    {
-        //output is admin
-        qDebug() << "Current User: " << currentUser;
-        QMessageBox::information(this, "Logged In", "You are logged in as Admin");
-    } else {
-        //output is guest
-        qDebug() << "Current User: " << currentUser;
-        QMessageBox::information(this, "Logged In", "You are logged in as Guest");
-        stackedWidget->setCurrentIndex(1);
+        if (currentUser == "Admin" || currentuserid == 1) // check if current user is member, guest or staff
+        {
+            //output is admin
+            qDebug() << "Current User: " << currentuserid;
+            QMessageBox::information(this, "Logged In", "You are logged in as Admin");
+            stackedWidget->setCurrentIndex(staffIndex);
+        } else if (currentuserid == 2)
+        {
+            //output is member
+            qDebug() << "Current User: " << currentuserid;
+            QMessageBox::information(this, "Logged In", "You are logged in as Member");
+            stackedWidget->setCurrentIndex(memberIndex);
+        } else
+        {
+            //output is guest
+            qDebug() << "Current User: " << currentuserid;
+            QMessageBox::information(this, "Logged Out", "Hello Guest");
+            stackedWidget->setCurrentIndex(guestIndex);
+        }
     }
-
 }
 
 void MainWindow::on_pushButton_guestSignIn_clicked()
@@ -159,7 +175,7 @@ void MainWindow::on_pushButton_StaffBooksEdit_clicked()
 void MainWindow::on_pushButton_StaffSignOut_clicked()
 {
     logout();
-    stackedWidget->setCurrentIndex(1);
+    stackedWidget->setCurrentIndex(guestIndex);
     qDebug() << "Current Stacked Widget: " << stackedWidget->currentIndex(); // output which stacked widget is currently active
 }
 
@@ -226,8 +242,14 @@ void MainWindow::booksDisplay()
     QStringList headerLabels;
 
     QJsonObject jsonCategory = files.readFromJson(files.filePathCategory);
+    QJsonObject jsonBooks = files.readFromJson(files.filePathBooks);
     QJsonArray jsonCategoryDataArray = jsonCategory.contains("data") ? jsonCategory["data"].toArray() : QJsonArray();
+    QJsonArray jsonBooksDataArray = jsonBooks.contains("data") ? jsonBooks["data"].toArray() : QJsonArray();
     int rowCount = jsonCategoryDataArray.size();
+    int bookCount = jsonBooksDataArray.size();
+
+    int row = -1;
+    int column = -1;
 
     ui->tableWidget_BookDisplay->setRowCount(rowCount);
 
@@ -235,7 +257,46 @@ void MainWindow::booksDisplay()
     {
         QJsonObject object = jsonCategoryDataArray[i].toObject();
         QString categoryName = object["categoryName"].toString();
+        int categoryID = object["id"].toInt();
+
         headerLabels << categoryName;
+
+        column = -1; // Reset the column index for each category
+
+        for (int b = 0; b < bookCount; ++b)
+        {
+            QJsonObject bookObject = jsonBooksDataArray[b].toObject();
+            int bookCategory = bookObject["genre"].toInt();
+            QString booktitle = bookObject["title"].toString();
+            QString bookAuthor = bookObject["author"].toString();
+            QString bookPublishDate = bookObject["year"].toString();
+
+            if(categoryID == bookCategory)
+            {
+                ++column; // Increment the column index for each book
+
+                if (ui->tableWidget_BookDisplay->columnCount() <= column)
+                {
+                    ui->tableWidget_BookDisplay->insertColumn(column);
+                }
+
+                QWidget* widget = new QWidget();
+                QVBoxLayout* layout = new QVBoxLayout(widget);
+                QLabel* titleLabel = new QLabel("Title: " + booktitle );
+                QLabel* bookAuthorLabel = new QLabel("Author: " + bookAuthor );
+                QLabel* bookPublishDateLabel = new QLabel("Publish Year: " + bookPublishDate);
+
+                layout->addWidget(titleLabel);
+                layout->addWidget(bookAuthorLabel);
+                layout->addWidget(bookPublishDateLabel);
+
+                layout->setContentsMargins(0, 0, 0, 0);
+                widget->setLayout(layout);
+
+                // Set the custom widget as the table item
+                ui->tableWidget_BookDisplay->setCellWidget(i, column, widget);
+            }
+        }
     }
 
     ui->tableWidget_BookDisplay->setVerticalHeaderLabels(headerLabels);
@@ -414,4 +475,20 @@ void MainWindow::returnBook(int userId, int bookId)
     {
         QMessageBox::warning(this, "Invalid Book/User", "Book or user does not exist.");
     }
+}
+
+void MainWindow::loadCurrentUser()
+{
+    QJsonObject jsonUserData = files.readFromJson(files.filePathCurrentUser);
+    QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray();
+
+
+    for (int i = 0; i < jsonUserDataArray.size(); ++i) {
+        QJsonObject object = jsonUserDataArray[i].toObject();
+
+        currentUser = object["userName"].toString();
+        currentuserid = object["id"].toInt();
+    }
+
+
 }

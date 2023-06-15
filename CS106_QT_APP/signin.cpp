@@ -28,6 +28,11 @@ QString Signin::getPassword()
     return currentUserPass;
 }
 
+int Signin::getId()
+{
+    return currentuserid;
+}
+
 // Get staff logged on
 void Signin::on_pushButton_StaffLogin_clicked()
 {
@@ -60,9 +65,11 @@ void Signin::on_pushButton_StaffLogin_clicked()
             userFound =true;
             currentUserName = userName;
             currentUserPass = passwordSaved;
+            currentuserid = IDSaved;
 
-            if(files.writeToJson(files.filePathCurrentUser ,object, 1))
+            if(!files.writeToJson(files.filePathCurrentUser ,object, 1))
             {
+                qDebug() << "failed to write to current user json file";
             }
 
             emit userChecked();
