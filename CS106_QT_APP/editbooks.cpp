@@ -79,6 +79,6 @@ void editBooks::addCategorys()
 
         QString categoryName = object["categoryName"].toString();
 
-        ui->comboBox_Genere->addItem(categoryName);
+        ui->comboBox_Genre->addItem(categoryName);
     }
 }

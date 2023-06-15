@@ -32,17 +32,17 @@ void newBook::on_pushButton_saveNewBook_clicked()
 
     bool isCheckedOut = false;
     bool isReaeved = false;
-    int memberID = NULL;
+    int memberID = -1;
 
     // Set the book information
 
-    QJsonObject jsonNewUserObj;
-    jsonNewUserObj["title"] = bookTitle;
-    jsonNewUserObj["author"] = author;
-    jsonNewUserObj["genre"] = genre;
-    jsonNewUserObj["year"] = year;
-    jsonNewUserObj["id"] = fileManager.checkFileID(fileManager.filePathBooks, "id");
-    jsonNewUserObj["description"] = description;
+    QJsonObject jsonNewBookObj;
+    jsonNewBookObj["title"] = bookTitle;
+    jsonNewBookObj["author"] = author;
+    jsonNewBookObj["genre"] = genre;
+    jsonNewBookObj["year"] = year;
+    jsonNewBookObj["id"] = files.checkFileID(files.filePathBooks, "id");
+    jsonNewBookObj["description"] = description;
     jsonNewBookObj["isCheckOut"] = isCheckedOut;
     jsonNewBookObj["isReserved"] = isReaeved;
     jsonNewBookObj["memberID"] = memberID;
