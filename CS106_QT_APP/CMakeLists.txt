@@ -36,6 +36,7 @@ set(PROJECT_SOURCES
         deletebooks.cpp                
         categorymodadddel.cpp
         signin.cpp
+        openbook.cpp
 
         H_files/Utils/filemanagement.h
         H_files/Utils/mainwindow.h
@@ -50,6 +51,7 @@ set(PROJECT_SOURCES
         H_files/deletebooks.h
         H_files/signin.h
         H_files/userdata.h
+        H_files/openbook.h
 
         UI_files/deletebooks.ui
         UI_files/editbooks.ui
@@ -62,6 +64,7 @@ set(PROJECT_SOURCES
         UI_files/mainwindow.ui
         UI_files/signin.ui
         UI_files/categorymodadddel.ui
+        UI_files/openbook.ui
 
 
     )

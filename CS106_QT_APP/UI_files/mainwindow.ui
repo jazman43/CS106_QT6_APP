@@ -39,26 +39,45 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="panelLeft_aboutus_3">
+      <widget class="QTableWidget" name="tableWidget_BookDisplay_2">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>10</y>
-         <width>161</width>
-         <height>20</height>
+         <x>0</x>
+         <y>0</y>
+         <width>421</width>
+         <height>381</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <bold>true</bold>
-        </font>
+       <property name="rowCount">
+        <number>2</number>
        </property>
-       <property name="text">
-        <string>Book Highlights</string>
+       <property name="columnCount">
+        <number>1</number>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="horizontalHeaderMinimumSectionSize">
+        <number>34</number>
+       </attribute>
+       <attribute name="horizontalHeaderDefaultSectionSize">
+        <number>200</number>
+       </attribute>
+       <attribute name="horizontalHeaderHighlightSections">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderDefaultSectionSize">
+        <number>60</number>
+       </attribute>
+       <attribute name="verticalHeaderHighlightSections">
+        <bool>false</bool>
+       </attribute>
+       <row/>
+       <row/>
+       <column/>
       </widget>
       <widget class="QTableWidget" name="tableWidget_BookDisplay_Member">
        <property name="geometry">
@@ -413,6 +432,9 @@ info@library.nz
         </rect>
        </property>
        <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
         <string>Search</string>
        </property>
       </widget>
@@ -1009,6 +1031,9 @@ info@library.nz
         </rect>
        </property>
        <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
         <string>Search</string>
        </property>
       </widget>
@@ -1135,26 +1160,45 @@ info@library.nz
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="panelLeft_aboutus_5">
+      <widget class="QTableWidget" name="tableWidget_BookDisplay_3">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>10</y>
-         <width>161</width>
-         <height>20</height>
+         <x>0</x>
+         <y>0</y>
+         <width>421</width>
+         <height>381</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <bold>true</bold>
-        </font>
+       <property name="rowCount">
+        <number>2</number>
        </property>
-       <property name="text">
-        <string>Book Highlights</string>
+       <property name="columnCount">
+        <number>1</number>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="horizontalHeaderMinimumSectionSize">
+        <number>34</number>
+       </attribute>
+       <attribute name="horizontalHeaderDefaultSectionSize">
+        <number>200</number>
+       </attribute>
+       <attribute name="horizontalHeaderHighlightSections">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderDefaultSectionSize">
+        <number>60</number>
+       </attribute>
+       <attribute name="verticalHeaderHighlightSections">
+        <bool>false</bool>
+       </attribute>
+       <row/>
+       <row/>
+       <column/>
       </widget>
      </widget>
      <widget class="QWidget" name="PanelRight_3" native="true">
@@ -1469,6 +1513,9 @@ info@library.nz
         </rect>
        </property>
        <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
         <string>Search</string>
        </property>
       </widget>
