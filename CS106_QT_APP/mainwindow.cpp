@@ -227,8 +227,14 @@ void MainWindow::booksDisplay()
     QStringList headerLabels;
 
     QJsonObject jsonCategory = files.readFromJson(files.filePathCategory);
+    QJsonObject jsonBooks = files.readFromJson(files.filePathBooks);
     QJsonArray jsonCategoryDataArray = jsonCategory.contains("data") ? jsonCategory["data"].toArray() : QJsonArray();
+    QJsonArray jsonBooksDataArray = jsonBooks.contains("data") ? jsonBooks["data"].toArray() : QJsonArray();
     int rowCount = jsonCategoryDataArray.size();
+    int bookCount = jsonBooksDataArray.size();
+
+    int row = -1;
+    int column = -1;
 
     ui->tableWidget_BookDisplay->setRowCount(rowCount);
 
@@ -236,7 +242,46 @@ void MainWindow::booksDisplay()
     {
         QJsonObject object = jsonCategoryDataArray[i].toObject();
         QString categoryName = object["categoryName"].toString();
+        int categoryID = object["id"].toInt();
+
         headerLabels << categoryName;
+
+        column = -1; // Reset the column index for each category
+
+        for (int b = 0; b < bookCount; ++b)
+        {
+            QJsonObject bookObject = jsonBooksDataArray[b].toObject();
+            int bookCategory = bookObject["genre"].toInt();
+            QString booktitle = bookObject["title"].toString();
+            QString bookAuthor = bookObject["author"].toString();
+            QString bookPublishDate = bookObject["year"].toString();
+
+            if(categoryID == bookCategory)
+            {
+                ++column; // Increment the column index for each book
+
+                if (ui->tableWidget_BookDisplay->columnCount() <= column)
+                {
+                    ui->tableWidget_BookDisplay->insertColumn(column);
+                }
+
+                QWidget* widget = new QWidget();
+                QVBoxLayout* layout = new QVBoxLayout(widget);
+                QLabel* titleLabel = new QLabel("Title: " + booktitle );
+                QLabel* bookAuthorLabel = new QLabel("Author: " + bookAuthor );
+                QLabel* bookPublishDateLabel = new QLabel("Publish Year: " + bookPublishDate);
+
+                layout->addWidget(titleLabel);
+                layout->addWidget(bookAuthorLabel);
+                layout->addWidget(bookPublishDateLabel);
+
+                layout->setContentsMargins(0, 0, 0, 0);
+                widget->setLayout(layout);
+
+                // Set the custom widget as the table item
+                ui->tableWidget_BookDisplay->setCellWidget(i, column, widget);
+            }
+        }
     }
 
     ui->tableWidget_BookDisplay->setVerticalHeaderLabels(headerLabels);
@@ -429,8 +474,6 @@ void MainWindow::loadCurrentUser()
         currentUser = object["userName"].toString();
         currentuserid = object["id"].toInt();
     }
-
-
 
 
 }
