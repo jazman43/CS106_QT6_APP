@@ -36,6 +36,7 @@ private slots:
     void on_pushButton_StaffBooksEdit_clicked();
 
     void on_pushButton_StaffSignOut_clicked();
+    void on_pushButton_MemberSignOut_clicked();
 
     void booksDisplay();
 
