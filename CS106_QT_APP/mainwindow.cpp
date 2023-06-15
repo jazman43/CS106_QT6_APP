@@ -16,15 +16,21 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this); // set up ui
 
     // Sign out any signed in users
+    QJsonObject usersLoggedIn = files.readFromJson(files.filePathCurrentUser);
 
-    logout(); //call the logout function
+    if(usersLoggedIn.empty())
+    {
+        logout(); //call the logout function
+        qDebug() << "logged old users out";
+    }
+
 
     //hide Account Drop Down Menus
     ui->account_dropDown_guestHome->hide();
     ui->Account_StaffHome->hide();
 
     stackedWidget = findChild<QStackedWidget*>("stackedWidget"); // find stacked widgets
-    stackedWidget->setCurrentIndex(1); // set first Home screen as guest
+    stackedWidget->setCurrentIndex(guestIndex); // set first Home screen as guest
 
     booksDisplay();
 
@@ -37,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     connect(this, &MainWindow::homeWindowHidden, this, &MainWindow::onHomeWindowHidden);
+
+    loadCurrentUser();
 
 }
 
@@ -56,7 +64,7 @@ void MainWindow::loginCheck()
 
     if(signinWindow->staffLoggedOn && !jsonCurrentUser.empty()) // if staff is logged on
     {
-        stackedWidget->setCurrentIndex(2); // Admin Home page
+        stackedWidget->setCurrentIndex(staffIndex); // Admin Home page
 
         QString loggedInUsername; // set logged in username to empty string
 
@@ -81,10 +89,10 @@ void MainWindow::loginCheck()
         currentUser = loggedInUsername;
     } else if (!signinWindow->staffLoggedOn && !jsonCurrentUser.empty())
     {
-        stackedWidget->setCurrentIndex(0); // Member home page
+        stackedWidget->setCurrentIndex(memberIndex); // Member home page
     } else
     {
-        stackedWidget->setCurrentIndex(1); // Guest home page
+        stackedWidget->setCurrentIndex(guestIndex); // Guest home page
     }
 }
 
@@ -120,9 +128,10 @@ void MainWindow::onHomeWindowHidden()
     {
         QJsonObject object = jsonUserDataArray[i].toObject(); // get object at index i
         QString username = object["username"].toString(); // get username from object
+
     }
 
-    if (currentUser == "Admin") // check if current user is member, guest or staff
+    if (currentUser == "Admin" || currentuserid == 1) // check if current user is member, guest or staff
     {
         //output is admin
         qDebug() << "Current User: " << currentUser;
@@ -131,7 +140,7 @@ void MainWindow::onHomeWindowHidden()
         //output is guest
         qDebug() << "Current User: " << currentUser;
         QMessageBox::information(this, "Logged In", "You are logged in as Guest");
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(guestIndex);
     }
 
 }
@@ -159,7 +168,7 @@ void MainWindow::on_pushButton_StaffBooksEdit_clicked()
 void MainWindow::on_pushButton_StaffSignOut_clicked()
 {
     logout();
-    stackedWidget->setCurrentIndex(1);
+    stackedWidget->setCurrentIndex(guestIndex);
     qDebug() << "Current Stacked Widget: " << stackedWidget->currentIndex(); // output which stacked widget is currently active
 }
 
@@ -406,4 +415,22 @@ void MainWindow::returnBook(int userId, int bookId)
     {
         QMessageBox::warning(this, "Invalid Book/User", "Book or user does not exist.");
     }
+}
+
+void MainWindow::loadCurrentUser()
+{
+    QJsonObject jsonUserData = files.readFromJson(files.filePathCurrentUser);
+    QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray();
+
+
+    for (int i = 0; i < jsonUserDataArray.size(); ++i) {
+        QJsonObject object = jsonUserDataArray[i].toObject();
+
+        currentUser = object["userName"].toString();
+        currentuserid = object["id"].toInt();
+    }
+
+
+
+
 }

@@ -49,6 +49,7 @@ private:
     Ui::MainWindow *ui;
 
     QString currentUser;
+    int currentuserid;
 
     QStackedWidget* stackedWidget;
 
@@ -68,6 +69,13 @@ private:
 
     void returnBook(int userId, int bookId);
 
+    //home page Indexs
+    int memberIndex = 0;
+    int guestIndex =1;
+    int staffIndex = 2;
+
+
+    void loadCurrentUser();
 signals:
     void homeWindowHidden();
 };

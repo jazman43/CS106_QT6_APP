@@ -100,14 +100,8 @@ void bookData::onNewBookAdded() // onNewBookAdded():
     }
 }
 
-// Open editBooks window
-void bookData::on_pushButton_modfiyBook_clicked()
-{
-    editBooks *editbook = new editBooks();
-    editbook->show();
 
-    connect(editbook, &editBooks::modifyedBook, this, &bookData::onNewBookAdded);
-}
+
 
 // Open deleteBooks window
 void bookData::on_pushButton_deleteBook_clicked()
@@ -131,5 +125,14 @@ void bookData::on_pushButton_Catagoryes_clicked()
     categoryModAddDel* categoryWin = new categoryModAddDel();
 
     categoryWin->show();
+}
+
+// Open editBooks window
+void bookData::on_pushButton_modifyBook_clicked()
+{
+    editBooks *editbook = new editBooks();
+    editbook->show();
+
+    connect(editbook, &editBooks::modifyedBook, this, &bookData::onNewBookAdded);
 }
 
