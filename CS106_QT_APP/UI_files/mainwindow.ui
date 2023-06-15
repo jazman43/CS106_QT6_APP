@@ -385,7 +385,7 @@ info@library.nz
          <height>41</height>
         </rect>
        </property>
-       <widget class="QPushButton" name="navAccount_2">
+       <widget class="QPushButton" name="navAccount_Member">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -398,10 +398,10 @@ info@library.nz
          <string>👤</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="navWishlist_2">
+       <widget class="QPushButton" name="navWishlist_Member">
         <property name="geometry">
          <rect>
-          <x>60</x>
+          <x>110</x>
           <y>0</y>
           <width>31</width>
           <height>41</height>
@@ -411,10 +411,10 @@ info@library.nz
          <string>♥️</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="navNotification_2">
+       <widget class="QPushButton" name="navNotification_Member">
         <property name="geometry">
          <rect>
-          <x>110</x>
+          <x>60</x>
           <y>0</y>
           <width>31</width>
           <height>41</height>
@@ -439,82 +439,6 @@ info@library.nz
        </property>
       </widget>
      </widget>
-     <widget class="QFrame" name="Account_MemberHome_2">
-      <property name="geometry">
-       <rect>
-        <x>630</x>
-        <y>50</y>
-        <width>181</width>
-        <height>131</height>
-       </rect>
-      </property>
-      <property name="autoFillBackground">
-       <bool>false</bool>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QFrame
-{
-	background-color: rgba(0, 0, 0,80);
-}</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <property name="lineWidth">
-       <number>15</number>
-      </property>
-      <property name="midLineWidth">
-       <number>10</number>
-      </property>
-      <widget class="QWidget" name="verticalLayoutWidget_3">
-       <property name="geometry">
-        <rect>
-         <x>-1</x>
-         <y>-1</y>
-         <width>181</width>
-         <height>131</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="leftMargin">
-         <number>10</number>
-        </property>
-        <property name="topMargin">
-         <number>10</number>
-        </property>
-        <property name="rightMargin">
-         <number>10</number>
-        </property>
-        <property name="bottomMargin">
-         <number>10</number>
-        </property>
-        <item>
-         <widget class="QPushButton" name="pushButton_memberAccountSettings">
-          <property name="text">
-           <string>Account</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_MemberBooks">
-          <property name="text">
-           <string>Books</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_MemberSignOut">
-          <property name="text">
-           <string>Sign out</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
      <widget class="QLabel" name="label_3">
       <property name="geometry">
        <rect>
@@ -527,6 +451,137 @@ info@library.nz
       <property name="text">
        <string>member</string>
       </property>
+     </widget>
+     <widget class="QStackedWidget" name="dropdowns_MemberHome">
+      <property name="geometry">
+       <rect>
+        <x>630</x>
+        <y>50</y>
+        <width>181</width>
+        <height>381</height>
+       </rect>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="Notification_MemberHome">
+       <widget class="QFrame" name="frame_Notification_MemberHome">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>181</width>
+          <height>381</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame
+{
+	background-color: rgba(0, 0, 0,80);
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QTableWidget" name="table_Notification_MemberHome">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>181</width>
+           <height>381</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="Account_MemberHome">
+       <widget class="QFrame" name="frame_Account_MemberHome">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>181</width>
+          <height>131</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame
+{
+	background-color: rgba(0, 0, 0,80);
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QWidget" name="verticalLayoutWidget_9">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>181</width>
+           <height>132</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pushButton_memberAccountSettings">
+            <property name="text">
+             <string>Account</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_MemberBooks">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Books</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_MemberSignOut">
+            <property name="text">
+             <string>Sign out</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="Wishlist_MemberHome">
+       <widget class="QTableWidget" name="table_Wishlist_MemberHome">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>181</width>
+          <height>381</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="GuestHome">
@@ -1383,23 +1438,10 @@ info@library.nz
          <string>👤</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="navWishlist_Staff">
-        <property name="geometry">
-         <rect>
-          <x>60</x>
-          <y>0</y>
-          <width>31</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>♥️</string>
-        </property>
-       </widget>
        <widget class="QPushButton" name="navNotification_Staff">
         <property name="geometry">
          <rect>
-          <x>110</x>
+          <x>60</x>
           <y>0</y>
           <width>31</width>
           <height>41</height>
