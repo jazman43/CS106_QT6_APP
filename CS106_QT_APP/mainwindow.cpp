@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     if(usersLoggedIn.empty())
     {
         logout(); //call the logout function
-        qDebug() << "logged old users out";
+        qDebug() << "All previous user sessions logged out";
     }
 
 
