@@ -36,12 +36,21 @@ private slots:
     void on_pushButton_StaffBooksEdit_clicked();
 
     void on_pushButton_StaffSignOut_clicked();
+    void on_pushButton_MemberSignOut_clicked();
 
     void booksDisplay();
 
+    // Account button clicked
     void on_navAccount_guest_clicked(bool checked);
-
     void on_navAccount_Staff_clicked(bool checked);
+    void on_navAccount_Member_clicked(bool checked);
+
+    // Notifications button clicked
+    void on_navNotification_Member_clicked(bool checked);
+    void on_navNotification_Staff_clicked(bool checked);
+
+    // Wishlist button clicked
+    void on_navWishlist_Member_clicked(bool checked);
 
     void on_tableWidget_BookDisplay_cellClicked(int row, int column);
 
@@ -61,10 +70,18 @@ private:
 
 
 
-    bool isGuestFrameVisible = false;
-    bool isStaffFrameVisible = false;
+    bool isGuestAccountFrameVisible = false;
+    bool isStaffAccountFrameVisible = false;
+    bool isMemberAccountFrameVisible = false;
+
+    bool isStaffNotificationFrameVisible = false;
+    bool isMemberNotificationFrameVisible = false;
+
 
     QList<QPair<QString, QString>> searchResults;
+
+    bool isMemberWishlistFrameVisible = false;
+
 
 
     //home page Indexs
