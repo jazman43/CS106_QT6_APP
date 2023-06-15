@@ -28,6 +28,13 @@ MainWindow::MainWindow(QWidget *parent)
     //hide Account Drop Down Menus
     ui->account_dropDown_guestHome->hide();
     ui->Account_StaffHome->hide();
+    ui->Account_MemberHome->hide();
+
+    // Hide Notification Dropdown Menues
+    ui->Notification_MemberHome->hide();
+
+    // Hide Wishlist Dropdown Menu
+    ui->Wishlist_MemberHome->hide();
 
     stackedWidget = findChild<QStackedWidget*>("stackedWidget"); // find stacked widgets
     stackedWidget->setCurrentIndex(guestIndex); // set first Home screen as guest
@@ -85,12 +92,27 @@ void MainWindow::loginCheck()
                 break;
             }
         }
-
         currentUser = loggedInUsername;
-    } else if (!signinWindow->staffLoggedOn && !jsonCurrentUser.empty())
+    } else if (!signinWindow->staffLoggedOn && !jsonCurrentUser.empty()) // if member is logged on
     {
         stackedWidget->setCurrentIndex(memberIndex); // Member home page
-    } else
+
+        QString loggedInUsername; // set logged in username to empty string
+
+        for (int i = 0; i < rowCount; i++) // loop through user data file
+        {
+            QJsonObject object = jsonUserDataArray[i].toObject(); // get object at index i
+            QString username = object["username"].toString(); // get username from object
+            QString password = object["password"].toString(); // get password from object
+
+            if (username == signinWindow->getUsername() && password == signinWindow->getPassword()) // if username and password are valid
+            {
+                loggedInUsername = username; // set logged in username to username
+                break;
+            }
+        }
+        currentUser = loggedInUsername;
+    } else // if no user is logged on
     {
         stackedWidget->setCurrentIndex(guestIndex); // Guest home page
     }
@@ -179,7 +201,15 @@ void MainWindow::on_pushButton_StaffSignOut_clicked()
     qDebug() << "Current Stacked Widget: " << stackedWidget->currentIndex(); // output which stacked widget is currently active
 }
 
-// Log Out - Staff
+// Log Out - Member - Button
+void MainWindow::on_pushButton_MemberSignOut_clicked()
+{
+    logout();
+    stackedWidget->setCurrentIndex(1);
+    qDebug() << "Current Stacked Widget: " << stackedWidget->currentIndex(); // output which stacked widget is currently active
+}
+
+// Log Out
 void MainWindow::logout()
 {
     QJsonObject currentJsonUserObj = files.readFromJson(files.filePathCurrentUser);
@@ -202,11 +232,18 @@ void MainWindow::logout()
     }
 }
 
+/* -----
+Navigation Buttons
+----- */
+
+/* Account Buttons */
+
+// Guest Account
 void MainWindow::on_navAccount_guest_clicked(bool checked)//guest Account DropDown menu
 {
-    isGuestFrameVisible = !isGuestFrameVisible;
+    isGuestAccountFrameVisible = !isGuestAccountFrameVisible;
 
-    if(isGuestFrameVisible)
+    if(isGuestAccountFrameVisible)
     {
         ui->account_dropDown_guestHome->show();
     }else {
@@ -215,17 +252,66 @@ void MainWindow::on_navAccount_guest_clicked(bool checked)//guest Account DropDo
 
 }
 
-
+// Staff Account
 void MainWindow::on_navAccount_Staff_clicked(bool checked)//staff Account DropDown menu
 {
-    isStaffFrameVisible = !isStaffFrameVisible;
+    isStaffAccountFrameVisible = !isStaffAccountFrameVisible;
 
 
-    if(isStaffFrameVisible)
+    if(isStaffAccountFrameVisible)
     {
         ui->Account_StaffHome->show();
     }else {
         ui->Account_StaffHome->hide();
+    }
+}
+
+// Member Account
+void MainWindow::on_navAccount_Member_clicked(bool checked)
+{
+    isMemberAccountFrameVisible = !isMemberAccountFrameVisible;
+
+    if(isMemberAccountFrameVisible)
+    {
+        ui->Account_MemberHome->show();
+    }else {
+        ui->Account_MemberHome->hide();
+    }
+}
+
+/* Notification Buttons */
+
+// Member Notification
+void MainWindow::on_navNotification_Member_clicked(bool checked)
+{
+    isMemberNotificationFrameVisible = !isMemberNotificationFrameVisible;
+
+    if(isMemberNotificationFrameVisible)
+    {
+        ui->Notification_MemberHome->show();
+    }else {
+        ui->Notification_MemberHome->hide();
+    }
+}
+
+// Staff Notification
+void MainWindow::on_navNotification_Staff_clicked(bool checked)
+{
+
+}
+
+/* Wishlist Button */
+
+// Member Wishlist
+void MainWindow::on_navWishlist_Member_clicked(bool checked)
+{
+    isMemberWishlistFrameVisible = !isMemberWishlistFrameVisible;
+
+    if(isMemberWishlistFrameVisible)
+    {
+        ui->Wishlist_MemberHome->show();
+    }else {
+        ui->Wishlist_MemberHome->hide();
     }
 }
 
