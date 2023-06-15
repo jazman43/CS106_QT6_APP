@@ -163,6 +163,14 @@ void MainWindow::on_pushButton_StaffSignOut_clicked()
     qDebug() << "Current Stacked Widget: " << stackedWidget->currentIndex(); // output which stacked widget is currently active
 }
 
+// Log Out - Member - Button
+void MainWindow::on_pushButton_MemberSignOut_clicked()
+{
+    logout();
+    stackedWidget->setCurrentIndex(1);
+    qDebug() << "Current Stacked Widget: " << stackedWidget->currentIndex(); // output which stacked widget is currently active
+}
+
 // Log Out - Staff
 void MainWindow::logout()
 {
