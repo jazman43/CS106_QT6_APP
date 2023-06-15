@@ -117,6 +117,7 @@ void MainWindow::defaultAdminUser() // create default admin user
 
 void MainWindow::onHomeWindowHidden()
 {
+    loadCurrentUser();
     loginCheck(); // check if user is logged in
     show(); // show main window
 
@@ -129,20 +130,26 @@ void MainWindow::onHomeWindowHidden()
         QJsonObject object = jsonUserDataArray[i].toObject(); // get object at index i
         QString username = object["username"].toString(); // get username from object
 
+        if (currentUser == "Admin" || currentuserid == 1) // check if current user is member, guest or staff
+        {
+            //output is admin
+            qDebug() << "Current User: " << currentuserid;
+            QMessageBox::information(this, "Logged In", "You are logged in as Admin");
+            stackedWidget->setCurrentIndex(staffIndex);
+        } else if (currentuserid == 2)
+        {
+            //output is member
+            qDebug() << "Current User: " << currentuserid;
+            QMessageBox::information(this, "Logged In", "You are logged in as Member");
+            stackedWidget->setCurrentIndex(memberIndex);
+        } else
+        {
+            //output is guest
+            qDebug() << "Current User: " << currentuserid;
+            QMessageBox::information(this, "Logged Out", "Hello Guest");
+            stackedWidget->setCurrentIndex(guestIndex);
+        }
     }
-
-    if (currentUser == "Admin" || currentuserid == 1) // check if current user is member, guest or staff
-    {
-        //output is admin
-        qDebug() << "Current User: " << currentUser;
-        QMessageBox::information(this, "Logged In", "You are logged in as Admin");
-    } else {
-        //output is guest
-        qDebug() << "Current User: " << currentUser;
-        QMessageBox::information(this, "Logged In", "You are logged in as Guest");
-        stackedWidget->setCurrentIndex(guestIndex);
-    }
-
 }
 
 void MainWindow::on_pushButton_guestSignIn_clicked()
