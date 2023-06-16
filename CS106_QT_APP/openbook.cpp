@@ -2,12 +2,12 @@
 #include "./UI_files/ui_openbook.h"
 #include <QMessageBox>
 
+
 openBook::openBook(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::openBook)
 {
     ui->setupUi(this);
-
 
 
 
@@ -28,8 +28,7 @@ void openBook::on_pushButton_BookCheckOutReserve_clicked()
     QJsonObject jsonCurrentUser = files.readFromJson(files.filePathCurrentUser);
     QJsonArray jsonCurrentUsersDataArray = jsonCurrentUser.contains("data") ? jsonCurrentUser["data"].toArray() : QJsonArray();
 
-    bool isCheckedOut = false;
-    bool isReserved = false;
+
     int memberID = -1;
     int bookID = -1;
 
@@ -51,15 +50,15 @@ void openBook::on_pushButton_BookCheckOutReserve_clicked()
     }
 
 
-    if(isCheckedOut && memberID > 0)
+    if(memberID > 0 && !isReserved)
     {
         ui->pushButton_BookCheckOutReserve->setText("Reserve");
-        isCheckedOut = false;
-        isReserved = true;
-
-    }else if(isReserved && memberID > 0){
         isCheckedOut = true;
-        isReserved = false;
+
+
+    }else if(memberID > 0 && !isCheckedOut){
+
+        isReserved = true;
         ui->pushButton_BookCheckOutReserve->setText("Check out");
     }else
     {
@@ -94,13 +93,25 @@ void openBook::loadbook()
         QJsonObject object = jsonBooksDataArray[i].toObject();
 
         //int ID = object["id"].toInt();
+        isCheckedOut = object["isCheckOut"].toBool();
+        isReserved = object["isReserved"].toBool();
+
 
         ui->label_BookAuthor->setText("Author: " + object["author"].toString());
         ui->label_BookTitle->setText(object["title"].toString());
         ui->label_BookYear->setText("Publish Year: " + object["year"].toString());
         ui->textBrowser_discrpsion->setText(object["discripsion"].toString());
 
+        if(isReserved)
+        {
+            ui->pushButton_BookCheckOutReserve->setText("Check out");
+            qDebug() <<"currently free to check out";
+        }else if(isCheckedOut)
+        {
+            ui->pushButton_BookCheckOutReserve->setText("Reserve");
+            qDebug() <<"currently checked out";
 
+        }
     }
 }
 

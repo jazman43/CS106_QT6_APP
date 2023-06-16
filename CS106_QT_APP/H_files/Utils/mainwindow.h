@@ -6,6 +6,7 @@
 #include <QStackedWidget>
 #include "filemanagement.h"
 #include "signin.h"
+#include <QTableWidget>
 
 
 
@@ -38,7 +39,6 @@ private slots:
     void on_pushButton_StaffSignOut_clicked();
     void on_pushButton_MemberSignOut_clicked();
 
-    void booksDisplay();
 
     // Account button clicked
     void on_navAccount_guest_clicked(bool checked);
@@ -55,6 +55,14 @@ private slots:
     void on_tableWidget_BookDisplay_cellClicked(int row, int column);
 
     void on_navSearch_textChanged(const QString &arg1);
+
+    void on_tableWidget_BookDisplay_3_cellClicked(int row, int column);
+
+    void on_tableWidget_BookDisplay_Member_cellClicked(int row, int column);
+
+    void on_navSearch_3_textChanged(const QString &arg1);
+
+    void on_navSearch_2_textChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
@@ -81,12 +89,7 @@ private:
     QList<QPair<QString, QString>> searchResults;
 
     bool isMemberWishlistFrameVisible = false;
-<<<<<<< HEAD
-=======
 
->>>>>>> f88e78dc4799d1f5494720a2a520113cbd7238ba
-
-    QList<QPair<QString, QString>> searchResults;
 
     //home page Indexs
     int memberIndex = 0;
@@ -97,7 +100,7 @@ private:
     void loadCurrentUser();
     void defaultAdminUser();
     void logout();
-
+    void booksDisplay(QTableWidget* &bookTable);
     void clearCurrentBook();
     void returnBook(int userId, int bookId);
     void searchBooks(const QString& searchText);

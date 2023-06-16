@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "./Utils/filemanagement.h"
+#include <QStackedWidget>
 
 namespace Ui {
 class openBook;
@@ -27,10 +28,14 @@ private:
     Ui::openBook *ui;
     fileManagement files;
 
-
+    QStackedWidget* stackedWidget;
 
     void checkBookOut();
     void loadbook();
+
+
+    bool isCheckedOut = false;
+    bool isReserved = false;
 };
 
 #endif // OPENBOOK_H

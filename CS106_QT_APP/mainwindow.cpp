@@ -40,7 +40,9 @@ MainWindow::MainWindow(QWidget *parent)
     stackedWidget = findChild<QStackedWidget*>("stackedWidget"); // find stacked widgets
     stackedWidget->setCurrentIndex(guestIndex); // set first Home screen as guest
 
-    booksDisplay();
+    booksDisplay(ui->tableWidget_BookDisplay);
+    booksDisplay(ui->tableWidget_BookDisplay_Member);
+     booksDisplay(ui->tableWidget_BookDisplay_3);
 
     connect(signinWindow, &Signin::userChecked, this, &MainWindow::loginCheck); //connect signinWindow to loginCheck
 
@@ -209,7 +211,7 @@ void MainWindow::on_pushButton_StaffSignOut_clicked()
 void MainWindow::on_pushButton_MemberSignOut_clicked()
 {
     logout();
-    stackedWidget->setCurrentIndex(1);
+    stackedWidget->setCurrentIndex(guestIndex);
     qDebug() << "Current Stacked Widget: " << stackedWidget->currentIndex(); // output which stacked widget is currently active
 }
 
@@ -319,7 +321,7 @@ void MainWindow::on_navWishlist_Member_clicked(bool checked)
     }
 }
 
-void MainWindow::booksDisplay()
+void MainWindow::booksDisplay(QTableWidget* &bookTable)
 {
     QStringList headerLabels;
 
@@ -333,9 +335,7 @@ void MainWindow::booksDisplay()
     int row = -1;
     int column = -1;
 
-    ui->tableWidget_BookDisplay->setRowCount(rowCount);
-    ui->tableWidget_BookDisplay_2->setRowCount(rowCount);
-    ui->tableWidget_BookDisplay_3->setRowCount(rowCount);
+    bookTable->setRowCount(rowCount);
 
     for(int i = 0; i < rowCount; ++i)
     {
@@ -359,13 +359,9 @@ void MainWindow::booksDisplay()
             {
                 ++column; // Increment the column index for each book
 
-                if (ui->tableWidget_BookDisplay->columnCount() <= column ||
-                        ui->tableWidget_BookDisplay_2->columnCount() <= column ||
-                        ui->tableWidget_BookDisplay_3->columnCount() <= column)
+                if (bookTable->columnCount() <= column)
                 {
-                    ui->tableWidget_BookDisplay->insertColumn(column);
-                    ui->tableWidget_BookDisplay_2->insertColumn(column);
-                    ui->tableWidget_BookDisplay_3->insertColumn(column);
+                    bookTable->insertColumn(column);
                 }
 
                 QWidget* widget = new QWidget();
@@ -382,16 +378,14 @@ void MainWindow::booksDisplay()
                 widget->setLayout(layout);
 
                 // Set the custom widget as the table item
-                ui->tableWidget_BookDisplay->setCellWidget(i, column, widget);
-                ui->tableWidget_BookDisplay_2->setCellWidget(i,column,widget);
-                ui->tableWidget_BookDisplay_3->setCellWidget(i,column,widget);
+                bookTable->setCellWidget(i, column, widget);
+
             }
         }
     }
 
-    ui->tableWidget_BookDisplay->setVerticalHeaderLabels(headerLabels);
-    ui->tableWidget_BookDisplay_2->setVerticalHeaderLabels(headerLabels);
-    ui->tableWidget_BookDisplay_3->setVerticalHeaderLabels(headerLabels);
+    bookTable->setVerticalHeaderLabels(headerLabels);
+
 }
 
 void MainWindow::on_tableWidget_BookDisplay_cellClicked(int row, int column)
@@ -410,32 +404,24 @@ void MainWindow::on_tableWidget_BookDisplay_cellClicked(int row, int column)
 
     // Access the custom widget inside the cell
     QWidget* widget = ui->tableWidget_BookDisplay->cellWidget(row, column);
-    QWidget* widget_2 = ui->tableWidget_BookDisplay_2->cellWidget(row, column);
-    QWidget* widget_3 = ui->tableWidget_BookDisplay_3->cellWidget(row, column);
-    if (widget || widget_2 || widget_3)
+
+    if (widget)
     {
 
         QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(widget->layout());
-        QVBoxLayout* layout_2 = qobject_cast<QVBoxLayout*>(widget_2->layout());
-        QVBoxLayout* layout_3 = qobject_cast<QVBoxLayout*>(widget_3->layout());
-        if (layout && layout->count() >= 2 ||
-                layout_2 && layout_2->count() >= 2||
-                layout_3 && layout_3->count() >= 2)
+
+        if (layout && layout->count() >= 2
+                )
         {
             QLabel* titleLabel = qobject_cast<QLabel*>(layout->itemAt(0)->widget());
-            QLabel* titleLabel_2 = qobject_cast<QLabel*>(layout_2->itemAt(0)->widget());
-            QLabel* titleLabel_3 = qobject_cast<QLabel*>(layout_3->itemAt(0)->widget());
+
             QLabel* categoryLabel = qobject_cast<QLabel*>(layout->itemAt(1)->widget());
-            QLabel* categoryLabel_2 = qobject_cast<QLabel*>(layout_2->itemAt(1)->widget());
-            QLabel* categoryLabel_3 = qobject_cast<QLabel*>(layout_3->itemAt(1)->widget());
+
             if (titleLabel && categoryLabel)
             {
                 bookTitle = titleLabel->text();
-                bookTitle = titleLabel_2->text();
-                bookTitle = titleLabel_3->text();
+
                 categoryName = categoryLabel->text();
-                categoryName = categoryLabel_2->text();
-                categoryName = categoryLabel_3->text();
 
 
                 QString bookAuthor;
@@ -601,10 +587,14 @@ void MainWindow::searchBooks(const QString& searchText)
     QJsonArray jsonBooksDataArray = jsonBookData.contains("data") ? jsonBookData["data"].toArray() : QJsonArray();
 
     ui->tableWidget_BookDisplay->clearContents();
+    ui->tableWidget_BookDisplay_3->clearContents();
+    ui->tableWidget_BookDisplay_Member->clearContents();
 
     if (searchText.isEmpty())
     {
-        booksDisplay();
+        booksDisplay(ui->tableWidget_BookDisplay);
+        booksDisplay(ui->tableWidget_BookDisplay_Member);
+        booksDisplay(ui->tableWidget_BookDisplay_3);
 
         return;
     }
@@ -623,7 +613,12 @@ void MainWindow::searchBooks(const QString& searchText)
     }
 
     ui->tableWidget_BookDisplay->clearContents();
+    ui->tableWidget_BookDisplay_3->clearContents();
+    ui->tableWidget_BookDisplay_Member->clear();
+
     ui->tableWidget_BookDisplay->setRowCount(searchResults.size());
+    ui->tableWidget_BookDisplay_3->setRowCount(searchResults.size());
+    ui->tableWidget_BookDisplay_Member->setRowCount(searchResults.size());
 
     for (int i = 0; i < searchResults.size(); ++i)
     {
@@ -667,8 +662,7 @@ void MainWindow::on_navSearch_textChanged(const QString &arg1)
 {
     searchBooks(arg1);
 
-    //searchBooks(ui->navSearch_2->text());
-    //searchBooks(ui->navSearch_3->text());
+
 }
 
 void MainWindow::clearCurrentBook()
@@ -692,3 +686,189 @@ void MainWindow::clearCurrentBook()
         }
     }
 }
+
+void MainWindow::on_tableWidget_BookDisplay_3_cellClicked(int row, int column)
+{
+    // Handel cell click event
+    qDebug() << "Row: " << row << " Column: " << column;
+
+
+    QJsonObject jsonBooks = files.readFromJson(files.filePathBooks);
+    QJsonArray jsonBooksDataArray = jsonBooks.contains("data") ? jsonBooks["data"].toArray() : QJsonArray();
+    int bookCount = jsonBooksDataArray.size();
+
+
+    QString categoryName;
+    QString bookTitle;
+
+    // Access the custom widget inside the cell
+    QWidget* widget = ui->tableWidget_BookDisplay->cellWidget(row, column);
+
+    if (widget)
+    {
+
+        QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(widget->layout());
+
+        if (layout && layout->count() >= 2
+                )
+        {
+            QLabel* titleLabel = qobject_cast<QLabel*>(layout->itemAt(0)->widget());
+
+            QLabel* categoryLabel = qobject_cast<QLabel*>(layout->itemAt(1)->widget());
+
+            if (titleLabel && categoryLabel)
+            {
+                bookTitle = titleLabel->text();
+                categoryName = categoryLabel->text();
+
+
+                QString bookAuthor;
+                QString bookDiscrpsion;
+                QString bookYear;
+                bool isCheckOut;
+                bool isReserved;
+                int memberID;
+                int bookID;
+
+
+
+                for (int i = 0; i < bookCount; ++i) {
+                    QJsonObject object = jsonBooksDataArray[i].toObject();
+                    QString title = object["title"].toString();
+
+                    if(title == bookTitle)
+                    {
+                        bookAuthor = object["author"].toString();
+                        bookDiscrpsion = object["discripsion"].toString();
+                        bookYear = object["year"].toString();
+                        isCheckOut = object["isCheckOut"].toBool();
+                        isReserved = object["isReserved"].toBool();
+                        bookID = object["id"].toInt();
+                        memberID = object["memberID"].toInt();
+
+
+
+                        if(!files.writeToJson(files.filePathCurrentBook ,object, 1))
+                        {
+                            qDebug() << "failed to write to current book json file";
+                        }
+
+                    }
+
+                }
+
+
+                // Use the book information as needed
+                qDebug() << "Book Title: " << bookTitle;
+                qDebug() << "Category Name: " << categoryName;
+
+                openBook* openbook = new openBook();
+                openbook->show();
+
+                //checkBookOut(bookTitle, memberID, bookID);
+
+            }
+        }
+    }
+
+}
+
+
+void MainWindow::on_tableWidget_BookDisplay_Member_cellClicked(int row, int column)
+{
+    // Handel cell click event
+    qDebug() << "Row: " << row << " Column: " << column;
+
+
+    QJsonObject jsonBooks = files.readFromJson(files.filePathBooks);
+    QJsonArray jsonBooksDataArray = jsonBooks.contains("data") ? jsonBooks["data"].toArray() : QJsonArray();
+    int bookCount = jsonBooksDataArray.size();
+
+
+    QString categoryName;
+    QString bookTitle;
+
+    // Access the custom widget inside the cell
+    QWidget* widget = ui->tableWidget_BookDisplay->cellWidget(row, column);
+
+    if (widget)
+    {
+
+        QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(widget->layout());
+
+        if (layout && layout->count() >= 2
+                )
+        {
+            QLabel* titleLabel = qobject_cast<QLabel*>(layout->itemAt(0)->widget());
+
+            QLabel* categoryLabel = qobject_cast<QLabel*>(layout->itemAt(1)->widget());
+
+            if (titleLabel && categoryLabel)
+            {
+                bookTitle = titleLabel->text();
+                categoryName = categoryLabel->text();
+
+
+                QString bookAuthor;
+                QString bookDiscrpsion;
+                QString bookYear;
+                bool isCheckOut;
+                bool isReserved;
+                int memberID;
+                int bookID;
+
+
+
+                for (int i = 0; i < bookCount; ++i) {
+                    QJsonObject object = jsonBooksDataArray[i].toObject();
+                    QString title = object["title"].toString();
+
+                    if(title == bookTitle)
+                    {
+                        bookAuthor = object["author"].toString();
+                        bookDiscrpsion = object["discripsion"].toString();
+                        bookYear = object["year"].toString();
+                        isCheckOut = object["isCheckOut"].toBool();
+                        isReserved = object["isReserved"].toBool();
+                        bookID = object["id"].toInt();
+                        memberID = object["memberID"].toInt();
+
+
+
+                        if(!files.writeToJson(files.filePathCurrentBook ,object, 1))
+                        {
+                            qDebug() << "failed to write to current book json file";
+                        }
+
+                    }
+
+                }
+
+
+                // Use the book information as needed
+                qDebug() << "Book Title: " << bookTitle;
+                qDebug() << "Category Name: " << categoryName;
+
+                openBook* openbook = new openBook();
+                openbook->show();
+
+                //checkBookOut(bookTitle, memberID, bookID);
+
+            }
+        }
+    }
+}
+
+
+void MainWindow::on_navSearch_3_textChanged(const QString &arg1)
+{
+    searchBooks(arg1);
+
+}
+
+
+void MainWindow::on_navSearch_2_textChanged(const QString &arg1)
+{
+    searchBooks(arg1);
+}
+
