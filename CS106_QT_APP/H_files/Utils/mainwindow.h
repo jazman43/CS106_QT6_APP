@@ -7,6 +7,9 @@
 #include "filemanagement.h"
 #include "signin.h"
 #include <QTableWidget>
+#include <QWidget>
+#include <QString>
+#include <QTableWidget>
 
 
 
@@ -52,7 +55,7 @@ private slots:
     // Wishlist button clicked
     void on_navWishlist_Member_clicked(bool checked);
 
-    void on_tableWidget_BookDisplay_cellClicked(int row, int column);
+
 
     void on_navSearch_textChanged(const QString &arg1);
 
@@ -85,10 +88,9 @@ private:
     bool isStaffNotificationFrameVisible = false;
     bool isMemberNotificationFrameVisible = false;
 
-
-    QList<QPair<QString, QString>> searchResults;
-
     bool isMemberWishlistFrameVisible = false;
+    void on_tableWidget_BookDisplay_cellClicked(QTableWidget* tableWidget, int row, int column);
+    QWidget* createWidget(const QString& bookTitle, const QString& bookAuthor, const QString& bookPublishDate);
 
 
     //home page Indexs
