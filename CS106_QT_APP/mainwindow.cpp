@@ -334,7 +334,7 @@ void MainWindow::booksDisplay()
     int column = -1;
 
     ui->tableWidget_BookDisplay->setRowCount(rowCount);
-    ui->tableWidget_BookDisplay_2->setRowCount(rowCount);
+    ui->tableWidget_BookDisplay_Member->setRowCount(rowCount);
     ui->tableWidget_BookDisplay_3->setRowCount(rowCount);
 
     for(int i = 0; i < rowCount; ++i)
@@ -360,11 +360,11 @@ void MainWindow::booksDisplay()
                 ++column; // Increment the column index for each book
 
                 if (ui->tableWidget_BookDisplay->columnCount() <= column ||
-                        ui->tableWidget_BookDisplay_2->columnCount() <= column ||
+                        ui->tableWidget_BookDisplay_Member->columnCount() <= column ||
                         ui->tableWidget_BookDisplay_3->columnCount() <= column)
                 {
                     ui->tableWidget_BookDisplay->insertColumn(column);
-                    ui->tableWidget_BookDisplay_2->insertColumn(column);
+                    ui->tableWidget_BookDisplay_Member->insertColumn(column);
                     ui->tableWidget_BookDisplay_3->insertColumn(column);
                 }
 
@@ -383,14 +383,14 @@ void MainWindow::booksDisplay()
 
                 // Set the custom widget as the table item
                 ui->tableWidget_BookDisplay->setCellWidget(i, column, widget);
-                ui->tableWidget_BookDisplay_2->setCellWidget(i,column,widget);
+                ui->tableWidget_BookDisplay_Member->setCellWidget(i,column,widget);
                 ui->tableWidget_BookDisplay_3->setCellWidget(i,column,widget);
             }
         }
     }
 
     ui->tableWidget_BookDisplay->setVerticalHeaderLabels(headerLabels);
-    ui->tableWidget_BookDisplay_2->setVerticalHeaderLabels(headerLabels);
+    ui->tableWidget_BookDisplay_Member->setVerticalHeaderLabels(headerLabels);
     ui->tableWidget_BookDisplay_3->setVerticalHeaderLabels(headerLabels);
 }
 
@@ -410,7 +410,7 @@ void MainWindow::on_tableWidget_BookDisplay_cellClicked(int row, int column)
 
     // Access the custom widget inside the cell
     QWidget* widget = ui->tableWidget_BookDisplay->cellWidget(row, column);
-    QWidget* widget_2 = ui->tableWidget_BookDisplay_2->cellWidget(row, column);
+    QWidget* widget_2 = ui->tableWidget_BookDisplay_Member->cellWidget(row, column);
     QWidget* widget_3 = ui->tableWidget_BookDisplay_3->cellWidget(row, column);
     if (widget || widget_2 || widget_3)
     {
