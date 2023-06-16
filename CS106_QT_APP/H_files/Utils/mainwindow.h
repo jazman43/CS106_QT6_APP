@@ -59,10 +59,6 @@ private slots:
 
     void on_navSearch_textChanged(const QString &arg1);
 
-    void on_tableWidget_BookDisplay_3_cellClicked(int row, int column);
-
-    void on_tableWidget_BookDisplay_Member_cellClicked(int row, int column);
-
     void on_navSearch_3_textChanged(const QString &arg1);
 
     void on_navSearch_2_textChanged(const QString &arg1);
@@ -92,6 +88,7 @@ private:
     void on_tableWidget_BookDisplay_cellClicked(QTableWidget* tableWidget, int row, int column);
     QWidget* createWidget(const QString& bookTitle, const QString& bookAuthor, const QString& bookPublishDate);
 
+    QList<QPair<QString, QString>> searchResults;
 
     //home page Indexs
     int memberIndex = 0;
