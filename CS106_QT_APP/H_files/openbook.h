@@ -33,7 +33,7 @@ private:
     void checkBookOut();
     void loadbook();
 
-
+    void returnBook(int userId, int bookId);
     bool isCheckedOut = false;
     bool isReserved = false;
 };

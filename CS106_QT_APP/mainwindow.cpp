@@ -492,8 +492,6 @@ void MainWindow::on_tableWidget_BookDisplay_cellClicked(QTableWidget* tableWidge
 }
 
 
-
-
 void MainWindow::returnBook(int userId, int bookId)
 {
     QJsonObject jsonBookData = files.readFromJson(files.filePathBooks);
