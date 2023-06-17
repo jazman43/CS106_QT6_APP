@@ -26,7 +26,7 @@ public:
     ~MainWindow();
 
     void loginCheck();
-
+    void logout();
     void onHomeWindowHidden();
 
 private slots:
@@ -98,12 +98,19 @@ private:
 
     void loadCurrentUser();
     void defaultAdminUser();
-    void logout();
+
     void booksDisplay(QTableWidget* &bookTable);
     void clearCurrentBook();
     void returnBook(int userId, int bookId);
     void searchBooks(const QString& searchText);
     QString getCategoryName(int categoryID);
+
+
+    struct BookDetails {
+        QString title;
+        QString author;
+        QString publishDate;
+    };
 
 signals:
     void homeWindowHidden();

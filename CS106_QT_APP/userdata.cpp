@@ -85,12 +85,12 @@ void userData::loadUserDataTable()
         QJsonObject object = jsonUserDataArray[i].toObject(); // Get user data
 
         // Set user data
-        QString userName = object["userName"].toString();
+        QString userName = object["username"].toString();
         QString password = object["password"].toString();
         QString isAdmin = object["isAdmin"].toBool() ? "true" : "false";
         QString address = object["address"].toString();
         QString id = QString::number(object["id"].toInt());
-        QString phoneNumber = object["phoneNumber"].toString();
+        QString phoneNumber = object["phonenumber"].toString();
         QString currentBooks = object["currentBooks"].toString();
         QString overDueBooks = object["over-dueBooks"].toString();
         QString startDate = object["startDate"].toString();

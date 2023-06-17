@@ -22,11 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Sign out any signed in users
     QJsonObject usersLoggedIn = files.readFromJson(files.filePathCurrentUser);
 
-    if(usersLoggedIn.empty())
-    {
-        logout(); //call the logout function
-        qDebug() << "All previous user sessions logged out";
-    }
+
 
 
     //hide Account Drop Down Menus
@@ -45,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     booksDisplay(ui->tableWidget_BookDisplay);
     booksDisplay(ui->tableWidget_BookDisplay_Member);
-     booksDisplay(ui->tableWidget_BookDisplay_3);
+    booksDisplay(ui->tableWidget_BookDisplay_3);
 
     connect(signinWindow, &Signin::userChecked, this, &MainWindow::loginCheck); //connect signinWindow to loginCheck
 
@@ -92,16 +88,18 @@ void MainWindow::loginCheck()
     QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray(); // get array of data from user json file
     int rowCount = jsonUserDataArray.size(); // get number of rows in user data file
 
+    QString username;
+    QString loggedInUsername;
+
     if(signinWindow->staffLoggedOn && !jsonCurrentUser.empty()) // if staff is logged on
     {
         stackedWidget->setCurrentIndex(staffIndex); // Admin Home page
 
-        QString loggedInUsername; // set logged in username to empty string
 
         for (int i = 0; i < rowCount; i++) // loop through user data file
         {
             QJsonObject object = jsonUserDataArray[i].toObject(); // get object at index i
-            QString username = object["username"].toString(); // get username from object
+            username = object["username"].toString(); // get username from object
             QString password = object["password"].toString(); // get password from object
 
             if (username == "Admin" && password == "Admin") // if username and password are admin
@@ -116,25 +114,30 @@ void MainWindow::loginCheck()
             }
         }
         currentUser = loggedInUsername;
+
+        qDebug() << "staff logged in " + loggedInUsername;
+
     } else if (!signinWindow->staffLoggedOn && !jsonCurrentUser.empty()) // if member is logged on
     {
         stackedWidget->setCurrentIndex(memberIndex); // Member home page
 
-        QString loggedInUsername; // set logged in username to empty string
 
         for (int i = 0; i < rowCount; i++) // loop through user data file
         {
-            QJsonObject object = jsonUserDataArray[i].toObject(); // get object at index i
-            QString username = object["username"].toString(); // get username from object
-            QString password = object["password"].toString(); // get password from object
+            QJsonObject memberObject = jsonUserDataArray[i].toObject(); // get object at index i
+            username = memberObject["username"].toString(); // get username from object
+            int userID = memberObject["id"].toInt();
 
-            if (username == signinWindow->getUsername() && password == signinWindow->getPassword()) // if username and password are valid
+
+            if (userID == signinWindow->getId()) // if username and password are valid
             {
                 loggedInUsername = username; // set logged in username to username
                 break;
             }
         }
         currentUser = loggedInUsername;
+
+        qDebug() << "member logged in " + loggedInUsername;
     } else // if no user is logged on
     {
         stackedWidget->setCurrentIndex(guestIndex); // Guest home page
@@ -162,9 +165,17 @@ void MainWindow::defaultAdminUser() // create default admin user
 
 void MainWindow::onHomeWindowHidden()
 {
+
     loadCurrentUser();
     loginCheck(); // check if user is logged in
-    show(); // show main window
+    show();// show main window
+
+
+    /*
+     * setting page index based on whos logged in inbween pages/windows
+     *
+     *
+     * /*/
 
     QJsonObject jsonUserData = files.readFromJson(files.filePathMemberData); // read user data file
     QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray(); // get array of data from user json file
@@ -179,36 +190,36 @@ void MainWindow::onHomeWindowHidden()
         {
             //output is admin
             qDebug() << "Current User: " << currentuserid;
-            QMessageBox::information(this, "Logged In", "You are logged in as Admin");
+            //QMessageBox::information(this, "Logged In", "You are logged in as Admin");
             stackedWidget->setCurrentIndex(staffIndex);
-        } else if (currentuserid == 2)
+        } else if (currentuserid >= 2)
         {
             //output is member
             qDebug() << "Current User: " << currentuserid;
-            QMessageBox::information(this, "Logged In", "You are logged in as Member");
+            //QMessageBox::information(this, "Logged In", "You are logged in as Member");
             stackedWidget->setCurrentIndex(memberIndex);
         } else
         {
             //output is guest
             qDebug() << "Current User: " << currentuserid;
-            QMessageBox::information(this, "Logged Out", "Hello Guest");
+            //QMessageBox::information(this, "Logged Out", "Hello Guest");
             stackedWidget->setCurrentIndex(guestIndex);
         }
     }
 }
-
+//shows the sign in window when user clicks sign in button
 void MainWindow::on_pushButton_guestSignIn_clicked()
 {
     signinWindow->show();
 }
-
+//shows the user Data window when Staff/Admin clicks the user button and hides main window
 void MainWindow::on_pushButton_StaffUsersEdit_clicked()
 {
     this->hide();
     userData *userdata = new userData();
     userdata->show();
 }
-
+//shows the book Data window when Staff/Admin clicks the book button and hides main window
 void MainWindow::on_pushButton_StaffBooksEdit_clicked()
 {
     this->hide();
@@ -239,6 +250,8 @@ void MainWindow::logout()
     QJsonArray jsonUserDataArray = currentJsonUserObj.contains("data") ? currentJsonUserObj["data"].toArray() : QJsonArray();
     int rowCount = jsonUserDataArray.size();
 
+
+    //goes though and deletes the contents of current uses json file
     if (!currentJsonUserObj.isEmpty())
     {
         for (int i = 0; i < rowCount; ++i)
@@ -246,13 +259,14 @@ void MainWindow::logout()
             QJsonObject object = jsonUserDataArray[i].toObject();
 
             int id = object["id"].toInt();
-            QString currentUsername = object["userName"].toString();
+            QString currentUsername = object["username"].toString();
 
             files.deleteJsonElement(files.filePathCurrentUser,id);
 
             QMessageBox::information(this, "Log Out", "User " + currentUsername + " has Logged out");
         }
     }
+
 }
 
 /* -----
@@ -337,7 +351,7 @@ void MainWindow::on_navWishlist_Member_clicked(bool checked)
         ui->Wishlist_MemberHome->hide();
     }
 }
-
+//displays all books in a table
 void MainWindow::booksDisplay(QTableWidget* &bookTable)
 {
     QStringList headerLabels;
@@ -352,9 +366,7 @@ void MainWindow::booksDisplay(QTableWidget* &bookTable)
     int row = -1;
     int column = -1;
 
-    ui->tableWidget_BookDisplay->setRowCount(rowCount);
-    ui->tableWidget_BookDisplay_Member->setRowCount(rowCount);
-    ui->tableWidget_BookDisplay_3->setRowCount(rowCount);
+    bookTable->setRowCount(rowCount);
 
     for(int i = 0; i < rowCount; ++i)
     {
@@ -378,31 +390,25 @@ void MainWindow::booksDisplay(QTableWidget* &bookTable)
             {
                 ++column; // Increment the column index for each book
 
-                if (ui->tableWidget_BookDisplay->columnCount() <= column ||
-                        ui->tableWidget_BookDisplay_Member->columnCount() <= column ||
-                        ui->tableWidget_BookDisplay_3->columnCount() <= column)
+                if (bookTable->columnCount() <= column )
                 {
-                    ui->tableWidget_BookDisplay->insertColumn(column);
-                    ui->tableWidget_BookDisplay_Member->insertColumn(column);
-                    ui->tableWidget_BookDisplay_3->insertColumn(column);
+                    bookTable->insertColumn(column);
+
                 }
 
                 // Create a new widget for each table
                 QWidget* widget1 = createWidget(booktitle, bookAuthor, bookPublishDate);
-                QWidget* widget2 = createWidget(booktitle, bookAuthor, bookPublishDate);
-                QWidget* widget3 = createWidget(booktitle, bookAuthor, bookPublishDate);
+
 
                 // Set the custom widget as the table item
-                ui->tableWidget_BookDisplay->setCellWidget(i, column, widget1);
-                ui->tableWidget_BookDisplay_Member->setCellWidget(i,column, widget2);
-                ui->tableWidget_BookDisplay_3->setCellWidget(i,column,widget3);
+                bookTable->setCellWidget(i, column, widget1);
+
             }
         }
     }
 
-    ui->tableWidget_BookDisplay->setVerticalHeaderLabels(headerLabels);
-    ui->tableWidget_BookDisplay_Member->setVerticalHeaderLabels(headerLabels);
-    ui->tableWidget_BookDisplay_3->setVerticalHeaderLabels(headerLabels);
+    bookTable->setVerticalHeaderLabels(headerLabels);
+
 }
 
 QWidget* MainWindow::createWidget(const QString& booktitle, const QString& bookAuthor, const QString& bookPublishDate)
@@ -491,92 +497,6 @@ void MainWindow::on_tableWidget_BookDisplay_cellClicked(QTableWidget* tableWidge
     }
 }
 
-
-void MainWindow::returnBook(int userId, int bookId)
-{
-    QJsonObject jsonBookData = files.readFromJson(files.filePathBooks);
-    QJsonObject jsonUserData = files.readFromJson(files.filePathMemberData);
-    QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray();
-    QJsonArray jsonBookDataArray = jsonBookData.contains("data") ? jsonBookData["data"].toArray() : QJsonArray();
-
-    int rowCount = jsonUserDataArray.size();
-    int bookCount = jsonBookDataArray.size();
-
-    int userIndex = -1;
-    int bookIndex = -1;
-
-    // Find the user index
-    for (int i = 0; i < rowCount; i++)
-    {
-        QJsonObject userObj = jsonUserDataArray[i].toObject();
-        if (userObj["id"].toInt() == userId)
-        {
-            userIndex = i;
-            break;
-        }
-    }
-
-    // Find the book index
-    for (int i = 0; i < bookCount; i++)
-    {
-        QJsonObject bookObj = jsonBookDataArray[i].toObject();
-        if (bookObj["id"].toInt() == bookId)
-        {
-            bookIndex = i;
-            break;
-        }
-    }
-
-    if (userIndex != -1 && bookIndex != -1)
-    {
-        QJsonObject userObj = jsonUserDataArray[userIndex].toObject();
-        QJsonObject bookObj = jsonBookDataArray[bookIndex].toObject();
-
-        bool isCheckedOut = bookObj["isCheckOut"].toBool();
-        QString bookName = bookObj["title"].toString();
-        QString checkoutDate = bookObj["checkoutDate"].toString();
-
-        // Update book information
-        bookObj["memberID"] = -1; // Reset member ID to indicate its not checked out
-        bookObj["isCheckOut"] = isCheckedOut = false;
-        bookObj["checkoutDate"] = "";
-
-        // Remove the book from the users currentBooks array
-        QJsonArray currentBooksArray = userObj["currentBooks"].toArray();
-        QJsonArray updatedCurrentBooksArray;
-
-        // Find the checked out book in the currentBooks array and remove it
-        for (int i = 0; i < currentBooksArray.size(); i++)
-        {
-            QJsonObject bookDataObj = currentBooksArray[i].toObject();
-            if (bookDataObj["bookId"].toInt() != bookId)
-            {
-                updatedCurrentBooksArray.append(bookDataObj);
-            }
-        }
-
-        userObj["currentBooks"] = updatedCurrentBooksArray;
-
-        jsonUserDataArray.replace(userIndex, userObj);
-        jsonUserData["data"] = jsonUserDataArray;
-
-        if (!files.writeToJson(files.filePathMemberData, jsonUserData, 1) && !files.writeToJson(files.filePathBooks, bookObj, 1))
-        {
-            qDebug() << "Failed to write to json file (Return Book)";
-        }
-        else
-        {
-
-            QMessageBox::information(this, "Book Returned", bookName + " has been returned.");
-
-        }
-    }
-    else
-    {
-        QMessageBox::warning(this, "Invalid Book/User", "Book or user does not exist.");
-    }
-}
-
 void MainWindow::loadCurrentUser()
 {
     QJsonObject jsonUserData = files.readFromJson(files.filePathCurrentUser);
@@ -586,7 +506,7 @@ void MainWindow::loadCurrentUser()
     for (int i = 0; i < jsonUserDataArray.size(); ++i) {
         QJsonObject object = jsonUserDataArray[i].toObject();
 
-        currentUser = object["userName"].toString();
+        currentUser = object["username"].toString();
         currentuserid = object["id"].toInt();
     }
 
@@ -618,18 +538,20 @@ void MainWindow::searchBooks(const QString& searchText)
     {
         QJsonObject bookObject = jsonBooksDataArray[i].toObject();
         QString bookTitle = bookObject["title"].toString();
+        QString bookAuthor = bookObject["author"].toString();
+        QString publishDate = bookObject["year"].toString();
 
         // Perform case-insensitive search
         if (bookTitle.contains(searchText, Qt::CaseInsensitive))
         {
-            QString categoryName = getCategoryName(bookObject["genre"].toInt());
-            searchResults.append(qMakePair(bookTitle, categoryName));
+            //QString categoryName = getCategoryName(bookObject["genre"].toInt());
+            searchResults.append(qMakePair(bookTitle, QString("%1\n%2").arg(bookAuthor, publishDate)));
         }
     }
 
     ui->tableWidget_BookDisplay->clearContents();
     ui->tableWidget_BookDisplay_3->clearContents();
-    ui->tableWidget_BookDisplay_Member->clear();
+    ui->tableWidget_BookDisplay_Member->clearContents();
 
     ui->tableWidget_BookDisplay->setRowCount(searchResults.size());
     ui->tableWidget_BookDisplay_3->setRowCount(searchResults.size());
@@ -639,13 +561,15 @@ void MainWindow::searchBooks(const QString& searchText)
     {
         const QPair<QString, QString>& result = searchResults[i];
         QString bookTitle = result.first;
-        QString categoryName = result.second;
+        QString bookDetails = result.second;
+
+        //createWidget(bookTitle,bookDetails,"");
 
         // Create a custom widget for the table item
         QWidget* widget = new QWidget();
         QVBoxLayout* layout = new QVBoxLayout(widget);
         QLabel* titleLabel = new QLabel(bookTitle);
-        QLabel* categoryLabel = new QLabel(categoryName);
+        QLabel* categoryLabel = new QLabel(bookDetails);
         layout->addWidget(titleLabel);
         layout->addWidget(categoryLabel);
         layout->setContentsMargins(0, 0, 0, 0);
@@ -677,7 +601,6 @@ void MainWindow::on_navSearch_textChanged(const QString &arg1)
 {
     searchBooks(arg1);
 
-
 }
 
 void MainWindow::clearCurrentBook()
@@ -693,10 +616,8 @@ void MainWindow::clearCurrentBook()
             QJsonObject object = jsonBookDataArray[i].toObject();
 
             int id = object["id"].toInt();
-            QString currentUsername = object["userName"].toString();
 
             files.deleteJsonElement(files.filePathCurrentBook,id);
-
 
         }
     }

@@ -91,7 +91,7 @@ void openBook::on_pushButton_BookCheckOutReserve_clicked()
         for (int i = 0; i < rowCount; ++i) {
             QJsonObject object = jsonBooksDataArray[i].toObject();
             int id = object["id"].toInt();
-            QString currentUsername = object["userName"].toString();
+
             files.deleteJsonElement(files.filePathCurrentBook, id);
         }
     }
@@ -127,7 +127,7 @@ void openBook::loadbook()
         isReserved = object["isReserved"].toBool();
 
         int bookMemberID = object["memberID"].toInt();
-        int bookID = object["id"].toInt();
+        //int bookID = object["id"].toInt();
 
         ui->label_BookAuthor->setText("Author: " + object["author"].toString());
         ui->label_BookTitle->setText(object["title"].toString());
@@ -194,9 +194,9 @@ void openBook::checkBookOut()
         QString checkoutDate = QDate::currentDate().toString("dd-MM-yyyy");
 
         QDate dueDate = QDate::currentDate().addDays(10);
-
+        isCheckedOut = true;
         selectedBook["memberID"] = memberID;
-        selectedBook["isCheckOut"] = isCheckedOut = true;
+        selectedBook["isCheckOut"] = isCheckedOut;
 
         QJsonObject checkedOutBook;
         checkedOutBook["id"] = bookId;
@@ -213,6 +213,7 @@ void openBook::checkBookOut()
             qDebug() << "Failed to write to json file (Check Out)";
         } else {
             qDebug() << "check out saved";
+            QMessageBox::information(this, "Book ", "" + bookName + " is checked out");
 
             QDate today = QDate::currentDate();
             int daysUntilDue = today.daysTo(dueDate);
