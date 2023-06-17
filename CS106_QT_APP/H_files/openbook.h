@@ -32,10 +32,16 @@ private:
 
     void checkBookOut();
     void loadbook();
+    void checkIfBookIsCheckedOut();
+    void returnBook();
 
-    void returnBook(int userId, int bookId);
+
     bool isCheckedOut = false;
     bool isReserved = false;
+
+    bool canCheckOut =false;
+    bool canRserve = false;
+    bool canReturn = false;
 };
 
 #endif // OPENBOOK_H

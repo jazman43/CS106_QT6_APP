@@ -49,8 +49,8 @@ void newUser::on_buttonBox_accepted()
 
     QJsonArray bookArray;
     QJsonObject book;
-    book["bookID"];
-    book["checkoutDate"];
+    book["bookID"]=-1;
+    book["checkoutDate"]=-1;
     bookArray.append(book);
     jsonNewUserObj["currentBooks"] = bookArray;//will be changed with a custom arrary of books :: ??
 

@@ -20,19 +20,27 @@ fileManagement::~fileManagement(){}
 QJsonObject fileManagement::readFromJson(const QString& filePath)
 {
     QFile jsonFile(filePath);
-    if(!jsonFile.open(QIODevice::ReadOnly))
+    if (!jsonFile.open(QIODevice::ReadOnly))
     {
+        qDebug() << "Failed to open JSON file for reading:" << filePath;
         return QJsonObject();
     }
 
     QByteArray jsonData = jsonFile.readAll();
     jsonFile.close();
 
-
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
-
-    if(jsonDoc.isNull())
+    QJsonParseError jsonError;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &jsonError);
+    if (jsonError.error != QJsonParseError::NoError)
     {
+        qDebug() << "Failed to parse JSON data from file:" << filePath;
+        qDebug() << "Error details:" << jsonError.errorString();
+        return QJsonObject();
+    }
+
+    if (!jsonDoc.isObject())
+    {
+        qDebug() << "Invalid JSON structure in file:" << filePath;
         return QJsonObject();
     }
 
