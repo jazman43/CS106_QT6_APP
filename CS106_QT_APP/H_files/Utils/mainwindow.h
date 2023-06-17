@@ -106,11 +106,7 @@ private:
     QString getCategoryName(int categoryID);
 
 
-    struct BookDetails {
-        QString title;
-        QString author;
-        QString publishDate;
-    };
+
 
 signals:
     void homeWindowHidden();

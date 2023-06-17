@@ -36,17 +36,21 @@ void openBook::on_pushButton_BookCheckOutReserve_clicked()
     if(canCheckOut){
         checkBookOut();
         canCheckOut =false;
+        return;
     }
     if(canRserve)
     {
         canRserve = false;
+        return;
     }
     if(canReturn)
     {
         returnBook();
+        canReturn = false;
+        return;
     }
 
-    accept();
+
 }
 
 void openBook::on_pushButton_BookFav_clicked()
@@ -63,6 +67,12 @@ void openBook::loadbook()
 
 
     int currentmemberID= -1;
+
+    if(jsonCurrentUsersDataArray.empty())
+    {
+        return;
+    }
+
 
     for (int i = 0; i < jsonBooksDataArray.size(); i++) {
         QJsonObject object = jsonBooksDataArray[i].toObject();
@@ -84,18 +94,21 @@ void openBook::loadbook()
         ui->label_BookYear->setText("Publish Year: " + object["year"].toString());
         ui->textBrowser_discrpsion->setText(object["discripsion"].toString());
 
-        if (isReserved) {
+        if (!isReserved) {
             ui->pushButton_BookCheckOutReserve->setText("Check out");
             qDebug() << "currently free to check out";
-        } else if (isCheckedOut) {
+            return;
+        } else if (!isCheckedOut) {
             ui->pushButton_BookCheckOutReserve->setText("Reserve");
             qDebug() << "currently checked out";
             if(currentmemberID == bookMemberID)
             {
                 ui->pushButton_BookCheckOutReserve->setText("Return");
 
-                qDebug() << "currently Returning book";
+                qDebug() << "can Return book";
+                return;
             }
+            return;
         }
     }
 }
@@ -153,7 +166,7 @@ void openBook::checkBookOut()
         checkedOutBook["checkoutDate"] = checkoutDate;
 
         QJsonArray currentBooksArray = selectedUser["currentBooks"].toArray();
-        //currentBooksArray.append(checkedOutBook);
+        currentBooksArray.append(checkedOutBook);
         selectedUser["currentBooks"] = currentBooksArray;
 
         jsonUserDataArray.replace(selectedUserIndex, selectedUser);
@@ -163,10 +176,13 @@ void openBook::checkBookOut()
             qDebug() << "Failed to write to json file (Check Out)";
         } else {
             qDebug() << "check out saved";
-            QMessageBox::information(this, "Book ", "" + bookName + " is checked out");
+
 
             QDate today = QDate::currentDate();
             int daysUntilDue = today.daysTo(dueDate);
+
+            QString date = dueDate.toString();
+            QMessageBox::information(this, "Book checked Out", "The book with name of " + bookName + " has been checked out return by date of " + date);
 
             if (daysUntilDue == 1) {
                 QMessageBox::information(this, "Book Due", "" + bookName + " is Due IN ONE day");
@@ -203,7 +219,11 @@ void openBook::returnBook()
     for (int i = 0; i < currentUser; i++)
     {
         QJsonObject userObj = jsonCurrentUserDataArray[i].toObject();
-        userIndex = userObj["id"].toInt();
+        int userID = userObj["id"].toInt();
+        if (userID == currentUser) {
+            userIndex = i;
+            break;
+        }
     }
 
     // Find the book index
@@ -226,9 +246,13 @@ void openBook::returnBook()
         QString bookName = bookObj["title"].toString();
         QString checkoutDate = bookObj["checkoutDate"].toString();
 
+        isCheckedOut = false;
+        isReserved = false;
+
         // Update book information
         bookObj["memberID"] = -1; // Reset member ID to indicate it's not checked out
-        bookObj["isCheckOut"] = isCheckedOut = false;
+        bookObj["isCheckOut"] = isCheckedOut;
+        bookObj["isReserved"] = isReserved;
         bookObj["checkoutDate"] = "";
 
         // Remove the book from the user's currentBooks array
@@ -278,6 +302,12 @@ void openBook::checkIfBookIsCheckedOut()
     int bookID = -1;
     int bookMemberID = -1;
 
+    canCheckOut = false;
+    canReturn = false;
+    canRserve = false;
+
+    bool canSave = false;
+
     for (int x = 0; x < jsonCurrentUsersDataArray.size(); ++x) {
         QJsonObject objectUser = jsonCurrentUsersDataArray[x].toObject();
         memberID = objectUser["id"].toInt();
@@ -291,39 +321,46 @@ void openBook::checkIfBookIsCheckedOut()
         bookMemberID = object["memberID"].toInt();
     }
 
-    if (!jsonCurrentUsersDataArray.empty() && !isReserved) {
-        ui->pushButton_BookCheckOutReserve->setText("Reserve");
+    if (!jsonCurrentUsersDataArray.empty() && !isCheckedOut) {
+        ui->pushButton_BookCheckOutReserve->setText("Check out");
+
         isCheckedOut = true;
-        canRserve =true;
+        canCheckOut = true;
+        canSave = true;
     }
 
-    if (!jsonCurrentUsersDataArray.empty() && !isCheckedOut) {
+    if (!jsonCurrentUsersDataArray.empty() && !isReserved) {
+        ui->pushButton_BookCheckOutReserve->setText("Reserve");
         isReserved = true;
-        canCheckOut = true;
-        ui->pushButton_BookCheckOutReserve->setText("Check out");
+        canRserve =true;
+        canSave = true;
     }
+
 
     if(jsonCurrentUsersDataArray.empty())
     {
         ui->pushButton_BookCheckOutReserve->setText("Locked");
         QMessageBox::warning(this, "guest user", "This is not a member account");
-        this->hide();
+        return;
     }
 
 
     if(!jsonCurrentUsersDataArray.empty() && memberID == bookMemberID)
     {
         ui->pushButton_BookCheckOutReserve->setText("Return");
-
+        canSave = true;
         canReturn =true;
         isCheckedOut = false;
         qDebug() << "currently Returning book";
     }
 
+    if(canSave)
+    {
+        files.modifyJson(files.filePathBooks, "memberID", memberID, bookID);
+        files.modifyJson(files.filePathBooks, "isCheckOut", isCheckedOut, bookID);
+        files.modifyJson(files.filePathBooks, "isReserved", isReserved, bookID);
+    }
 
-    files.modifyJson(files.filePathBooks, "memberID", memberID, bookID);
-    files.modifyJson(files.filePathBooks, "isCheckOut", isCheckedOut, bookID);
-    files.modifyJson(files.filePathBooks, "isReserved", isReserved, bookID);
 
     // delete current book
 
