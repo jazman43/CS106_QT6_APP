@@ -9,6 +9,10 @@
 #include <QTableWidget>
 #include <QWidget>
 #include <QString>
+#include <QTableWidget>
+
+
+
 
 namespace Ui { class MainWindow; }
 
@@ -22,7 +26,7 @@ public:
     ~MainWindow();
 
     void loginCheck();
-
+    void logout();
     void onHomeWindowHidden();
 
 private slots:
@@ -38,7 +42,6 @@ private slots:
     void on_pushButton_StaffSignOut_clicked();
     void on_pushButton_MemberSignOut_clicked();
 
-    void booksDisplay();
 
     // Account button clicked
     void on_navAccount_guest_clicked(bool checked);
@@ -55,6 +58,10 @@ private slots:
 
 
     void on_navSearch_textChanged(const QString &arg1);
+
+    void on_navSearch_3_textChanged(const QString &arg1);
+
+    void on_navSearch_2_textChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
@@ -78,12 +85,10 @@ private:
     bool isMemberNotificationFrameVisible = false;
 
     bool isMemberWishlistFrameVisible = false;
-
-    QList<QPair<QString, QString>> searchResults;
-
     void on_tableWidget_BookDisplay_cellClicked(QTableWidget* tableWidget, int row, int column);
     QWidget* createWidget(const QString& bookTitle, const QString& bookAuthor, const QString& bookPublishDate);
 
+    QList<QPair<QString, QString>> searchResults;
 
     //home page Indexs
     int memberIndex = 0;
@@ -93,12 +98,15 @@ private:
 
     void loadCurrentUser();
     void defaultAdminUser();
-    void logout();
 
+    void booksDisplay(QTableWidget* &bookTable);
     void clearCurrentBook();
     void returnBook(int userId, int bookId);
     void searchBooks(const QString& searchText);
     QString getCategoryName(int categoryID);
+
+
+
 
 signals:
     void homeWindowHidden();

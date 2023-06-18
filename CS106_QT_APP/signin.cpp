@@ -54,7 +54,7 @@ void Signin::on_pushButton_StaffLogin_clicked()
         staffLoggedOn = false;
 
         int IDSaved = object["id"].toInt();
-        QString userName =object["userName"].toString();
+        QString userName =object["username"].toString();
         QString passwordSaved = object["password"].toString();
         bool isAdmin = object["isAdmin"].toBool();
 
@@ -107,12 +107,15 @@ void Signin::on_pushButton_memberLogin_clicked()
 
         int IDSaved = object["id"].toInt();
         bool isAdmin = object["isAdmin"].toBool();
+        QString userName = object["username"].toString();
 
         // If member ID and is admin is false then set staff logged on to false
         if(memberID == IDSaved && !isAdmin)
         {
             staffLoggedOn = false;
             userFound =true;
+            currentUserName = userName;
+            currentuserid = IDSaved;
 
             if(files.writeToJson(files.filePathCurrentUser ,object, 1))
             {

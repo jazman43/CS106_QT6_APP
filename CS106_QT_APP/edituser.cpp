@@ -52,17 +52,30 @@ void editUser::on_pushButton_save_changes_clicked()
     QString address = ui->lineEdit_address->text();
     QString phonenumber = ui->lineEdit_number->text();
 
+    QJsonObject object;
+
+
 
 
     // Modify the user information
-    if(files.modifyJson(files.filePathMemberData,"username",username,id))
+    if(files.modifyJson(files.filePathMemberData,"username",id,QJsonObject(),username))
     {
-        // What is this ?
+        qDebug() << "saved to MemberData.json (edit user) ";
     }
-    // Modify the user information
-    files.modifyJson(files.filePathMemberData,"password",password,id);
-    files.modifyJson(files.filePathMemberData,"address",address,id);
-    files.modifyJson(files.filePathMemberData,"phonenumber",phonenumber,id);
+
+    if(files.modifyJson(files.filePathMemberData,"address",id,QJsonObject(),address))
+    {
+        qDebug() << "saved to MemberData.json (edit user) ";
+    }
+    if(files.modifyJson(files.filePathMemberData,"phonenumber",id,QJsonObject(),phonenumber))
+    {
+        qDebug() << "saved to MemberData.json (edit user) ";
+    }
+
+    if(files.modifyJson(files.filePathMemberData,"password",id,QJsonObject(),password))
+    {
+        qDebug() << "saved to MemberData.json (edit user) ";
+    }
 
     emit userModify();
 

@@ -33,7 +33,7 @@ void newBook::on_pushButton_saveNewBook_clicked()
     bool isCheckedOut = false;
     bool isReaeved = false;
     int memberID = -1;
-
+    int checkoutDate = -1;
     // Set the book information
 
     QJsonObject jsonNewBookObj;
@@ -46,7 +46,7 @@ void newBook::on_pushButton_saveNewBook_clicked()
     jsonNewBookObj["isCheckOut"] = isCheckedOut;
     jsonNewBookObj["isReserved"] = isReaeved;
     jsonNewBookObj["memberID"] = memberID;
-
+    jsonNewBookObj["checkoutDate"] = checkoutDate;
 
     // Write to json file
     if(files.writeToJson(files.filePathBooks ,jsonNewBookObj, 1))

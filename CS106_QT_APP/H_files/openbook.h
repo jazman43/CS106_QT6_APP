@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "./Utils/filemanagement.h"
+#include <QStackedWidget>
 
 namespace Ui {
 class openBook;
@@ -27,10 +28,26 @@ private:
     Ui::openBook *ui;
     fileManagement files;
 
-
+    QStackedWidget* stackedWidget;
 
     void checkBookOut();
     void loadbook();
+    void checkIfBookIsCheckedOut();
+    void returnBook();
+
+    void deleteCurrentBook();
+    void saveModifyedData(QJsonObject object, QString checkoutDate);
+
+    bool isCheckedOut = false;
+    bool isReserved = false;
+
+    bool canCheckOut =false;
+    bool canRserve = false;
+    bool canReturn = false;
+
+    int currentBookID = -1;
+    int currentUserID = -1;
+    int currentBookMemberID = -1;
 };
 
 #endif // OPENBOOK_H
