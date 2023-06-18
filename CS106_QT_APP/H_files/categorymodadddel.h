@@ -2,7 +2,7 @@
 #define CATEGORYMODADDDEL_H
 
 #include <QDialog>
-#include "filemanagement.h"
+#include "./Utils/filemanagement.h"
 
 namespace Ui {
 class categoryModAddDel;

@@ -24,7 +24,7 @@ public:
 
     QJsonObject readFromJson(const QString& filePath);
 
-    bool modifyJson(const QString& filePath, const QString& elementKey, const QJsonValue& newValue, const int& objectId);
+    bool modifyJson(const QString& filePath, const QString& elementKey,  const int& objectId, const QJsonObject& newObject, const QJsonValue& newValue);
 
     bool deleteJsonElement(const QString& filePath, const int& objectId);
     //finds last id of an json object and returns it with one added

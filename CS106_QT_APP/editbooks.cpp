@@ -49,17 +49,35 @@ void editBooks::on_pushButton_saveNewBook_clicked()
     QString year  = ui->lineEdit_Year->text();
     QString description = ui->textEdit_description->toPlainText();
 
-    // Modify the book information
-    if(files.modifyJson(files.filePathBooks,"title",bookTitle,id))
-    {
-        // What is this ?
+    QJsonObject object;
+    object["tilte"] =bookTitle;
+    object["author"] = author;
+    object["genre"] = genre;
+    object["year"] = year;
+    object["description"] = description;
 
-    }
     // Modify the book information
-    files.modifyJson(files.filePathBooks,"author",author,id);
-    files.modifyJson(files.filePathBooks,"genre",genre,id);
-    files.modifyJson(files.filePathBooks,"year",year,id);
-    files.modifyJson(files.filePathBooks,"description",description,id);
+    if(files.modifyJson(files.filePathBooks,"tilte",id, QJsonObject(),bookTitle))
+    {
+        qDebug() << "saveed to BooksData.json (Edit Books)";
+    }
+
+    if(files.modifyJson(files.filePathBooks,"author",id, QJsonObject(),author))
+    {
+        qDebug() << "saveed to BooksData.json (Edit Books)";
+    }
+    if(files.modifyJson(files.filePathBooks,"genre",id, QJsonObject(),genre))
+    {
+        qDebug() << "saveed to BooksData.json (Edit Books)";
+    }
+    if(files.modifyJson(files.filePathBooks,"year",id, QJsonObject(),year))
+    {
+        qDebug() << "saveed to BooksData.json (Edit Books)";
+    }
+    if(files.modifyJson(files.filePathBooks,"description",id, QJsonObject(),description))
+    {
+        qDebug() << "saveed to BooksData.json (Edit Books)";
+    }
 
     emit modifyedBook();
 

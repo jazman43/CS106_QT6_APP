@@ -105,69 +105,76 @@ bool fileManagement::writeToJson(const QString& filePath, const QJsonObject& jso
 }
 
 // Select object by id and modify it
-bool fileManagement::modifyJson(const QString& filePath, const QString& elementKey, const QJsonValue& newValue, const int& objectId)
+bool fileManagement::modifyJson(const QString& filePath, const QString& elementKey, const int& objectId, const QJsonObject& newObject, const QJsonValue& newValue)
 {
     QFile jsonFile(filePath);
-    if (!jsonFile.open(QIODevice::ReadWrite | QIODevice::Text))
-    {
-        return false;
-    }
-
-    QByteArray jsonData = jsonFile.readAll();
-    jsonFile.close();
-
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
-
-    if (jsonDoc.isNull() || !jsonDoc.isObject())
-    {
-        return false;
-    }
-
-    QJsonObject jsonObject = jsonDoc.object();
-
-    if (!jsonObject.contains("data") || !jsonObject["data"].isArray())
-    {
-        return false;
-    }
-
-    QJsonArray jsonArray = jsonObject["data"].toArray();
-
-    bool found = false;
-    for (int i = 0; i < jsonArray.size(); i++)
-    {
-        QJsonObject innerObject = jsonArray[i].toObject();
-        if (innerObject.contains("id") && innerObject["id"].toInt() == objectId)
+        if (!jsonFile.open(QIODevice::ReadWrite | QIODevice::Text))
         {
-            found = true;
-            if (innerObject.contains(elementKey))
+            return false;
+        }
+
+        QByteArray jsonData = jsonFile.readAll();
+        jsonFile.close();
+
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+
+        if (jsonDoc.isNull() || !jsonDoc.isObject())
+        {
+            return false;
+        }
+
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (!jsonObject.contains("data") || !jsonObject["data"].isArray())
+        {
+            return false;
+        }
+
+        QJsonArray jsonArray = jsonObject["data"].toArray();
+
+        bool found = false;
+        for (int i = 0; i < jsonArray.size(); i++)
+        {
+            QJsonObject innerObject = jsonArray[i].toObject();
+            if (innerObject.contains("id") && innerObject["id"].toInt() == objectId)
             {
-                innerObject[elementKey] = newValue;
+                found = true;
+                if (!newObject.empty())
+                {
+                    innerObject[elementKey] = newObject;
+                }
+                else
+                {
+                    if (innerObject.contains(elementKey))
+                    {
+                        innerObject[elementKey] = newValue;
+                    }
+                }
                 jsonArray.replace(i, innerObject);
                 break;
             }
         }
-    }
 
-    if (!found)
-    {
-        return false;
-    }
+        if (!found)
+        {
+            return false;
+        }
 
-    jsonObject["data"] = jsonArray;
-    jsonDoc.setObject(jsonObject);
+        jsonObject["data"] = jsonArray;
+        jsonDoc.setObject(jsonObject);
 
-    if (!jsonFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
-    {
-        return false;
-    }
+        if (!jsonFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
+        {
+            return false;
+        }
 
-    jsonData = jsonDoc.toJson();
+        jsonData = jsonDoc.toJson();
 
-    qint64 bytesWritten = jsonFile.write(jsonData);
+        qint64 bytesWritten = jsonFile.write(jsonData);
 
-    jsonFile.close();
+        jsonFile.close();
 
-    return (bytesWritten != -1 && bytesWritten == jsonData.size());
+        return (bytesWritten != -1 && bytesWritten == jsonData.size());
 }
 
 // Delete object by id

@@ -35,6 +35,8 @@ private:
     void checkIfBookIsCheckedOut();
     void returnBook();
 
+    void deleteCurrentBook();
+    void saveModifyedData(QJsonObject object, QString checkoutDate);
 
     bool isCheckedOut = false;
     bool isReserved = false;
@@ -42,6 +44,10 @@ private:
     bool canCheckOut =false;
     bool canRserve = false;
     bool canReturn = false;
+
+    int currentBookID = -1;
+    int currentUserID = -1;
+    int currentBookMemberID = -1;
 };
 
 #endif // OPENBOOK_H

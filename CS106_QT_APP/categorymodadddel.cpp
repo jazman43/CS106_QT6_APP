@@ -74,8 +74,9 @@ void categoryModAddDel::on_pushButton_Savemod_clicked()
     int id = ui->pushButton_idFindMod->text().toInt();
     QString categoryName = ui->lineEdit_categoryNameMod->text();
 
+
     // Modify the category name
-    if(!files.modifyJson(files.filePathCategory,"categoryName",categoryName,id))
+    if(!files.modifyJson(files.filePathCategory,"categoryName",id,QJsonObject(),categoryName))
     {
 
        qDebug() << "File Error, Unable To Write to Category file";

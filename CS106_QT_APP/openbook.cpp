@@ -8,14 +8,7 @@ openBook::openBook(QWidget *parent) :
     ui(new Ui::openBook)
 {
     ui->setupUi(this);
-    QJsonObject jsonCurrentUser = files.readFromJson(files.filePathCurrentUser);
-    QJsonArray jsonCurrentUsersDataArray = jsonCurrentUser.contains("data") ? jsonCurrentUser["data"].toArray() : QJsonArray();
-    if(jsonCurrentUsersDataArray.empty())
-    {
-        ui->pushButton_BookCheckOutReserve->setText("Locked");
-        QMessageBox::warning(this, "guest user", "This is not a member account");
-        reject();
-    }
+
 
     loadbook();
 }
@@ -33,20 +26,26 @@ void openBook::on_pushButton_BookCheckOutReserve_clicked()
 
     checkIfBookIsCheckedOut();
 
-    if(canCheckOut){
+    if(canCheckOut && currentBookMemberID != currentUserID){
         checkBookOut();
         canCheckOut =false;
+        deleteCurrentBook();
+        accept();
         return;
     }
-    if(canRserve)
+    if(canRserve && currentBookMemberID != currentUserID)
     {
         canRserve = false;
+        deleteCurrentBook();
+        accept();
         return;
     }
-    if(canReturn)
+    if(canReturn && currentBookMemberID == currentUserID)
     {
         returnBook();
         canReturn = false;
+        deleteCurrentBook();
+        accept();
         return;
     }
 
@@ -66,10 +65,12 @@ void openBook::loadbook()
     QJsonArray jsonCurrentUsersDataArray = jsonCurrentUser.contains("data") ? jsonCurrentUser["data"].toArray() : QJsonArray();
 
 
-    int currentmemberID= -1;
 
     if(jsonCurrentUsersDataArray.empty())
     {
+        ui->pushButton_BookCheckOutReserve->setText("Locked");
+        QMessageBox::warning(this, "guest user", "This is not a member account");
+        reject();
         return;
     }
 
@@ -79,15 +80,15 @@ void openBook::loadbook()
         for (int x = 0; x < jsonCurrentUsersDataArray.size(); ++x) {
             QJsonObject currentUserObj = jsonCurrentUsersDataArray[x].toObject();
 
-            currentmemberID = currentUserObj["id"].toInt();
+            currentUserID = currentUserObj["id"].toInt();
         }
 
 
         isCheckedOut = object["isCheckOut"].toBool();
         isReserved = object["isReserved"].toBool();
 
-        int bookMemberID = object["memberID"].toInt();
-        //int bookID = object["id"].toInt();
+        currentBookMemberID = object["memberID"].toInt();
+        currentBookID = object["id"].toInt();
 
         ui->label_BookAuthor->setText("Author: " + object["author"].toString());
         ui->label_BookTitle->setText(object["title"].toString());
@@ -101,10 +102,11 @@ void openBook::loadbook()
         } else if (!isCheckedOut) {
             ui->pushButton_BookCheckOutReserve->setText("Reserve");
             qDebug() << "currently checked out";
-            if(currentmemberID == bookMemberID)
+            QMessageBox::information(this, "currently checked out", "currently checked out");
+            if(currentUserID == currentBookMemberID)
             {
                 ui->pushButton_BookCheckOutReserve->setText("Return");
-
+                QMessageBox::information(this, "currently checked out", "currently checked out by you you can return");
                 qDebug() << "can Return book";
                 return;
             }
@@ -122,74 +124,67 @@ void openBook::checkBookOut()
 
     QJsonArray jsonUserDataArray = jsonUserData.contains("data") ? jsonUserData["data"].toArray() : QJsonArray();
     QJsonArray jsonBookDataArray = jsonBookData.contains("data") ? jsonBookData["data"].toArray() : QJsonArray();
-    QJsonArray jsonCurrentUserDataArray = jsonCurrentUserData.contains("data") ? jsonCurrentUserData["data"].toArray() : QJsonArray();
-    QJsonArray jsonCurrentBookDataArray = jsonCurrentBookData.contains("data") ? jsonCurrentBookData["data"].toArray() : QJsonArray();
+
 
     int rowCount = jsonUserDataArray.size();
     int bookCount = jsonBookDataArray.size();
-    int currentUser = jsonCurrentUserData.size();
-    int currentbook = jsonCurrentBookDataArray.size();
-
-    int selectedUserIndex = 0;
-    int selectedBookIndex = 0;
 
 
 
-    for (int i = 0; i < currentUser; ++i) {
 
-        QJsonObject currentUserObject = jsonCurrentUserDataArray[i].toObject();
-        selectedUserIndex = currentUserObject["id"].toInt();
-    }
+    if (!jsonCurrentBookData.empty() && !jsonCurrentUserData.empty()) {
 
-    for (int i = 0; i < currentbook; ++i) {
-        QJsonObject currentBookObject = jsonCurrentBookDataArray[i].toObject();
-        selectedBookIndex = currentBookObject["id"].toInt();
-    }
+        QJsonObject selectedUser;
 
-    if (selectedUserIndex >= 0 && selectedUserIndex < rowCount && selectedBookIndex >= 0 && selectedBookIndex < bookCount) {
-        QJsonObject selectedUser = jsonUserDataArray[selectedUserIndex].toObject();
-        QJsonObject selectedBook = jsonBookDataArray[selectedBookIndex].toObject();
+        QJsonObject selectedBook;
 
-        int memberID = selectedUser["id"].toInt();
-        bool isCheckedOut = selectedBook["isCheckOut"].toBool();
-        int bookId = selectedBook["id"].toInt();
+        for(int i = 0;i <rowCount;i++)
+        {
+            selectedUser = jsonUserDataArray[i].toObject();
+        }
+        for (int x = 0; x < bookCount; ++x) {
+            selectedBook = jsonBookDataArray[x].toObject();
+        }
+
+
+
+
         QString bookName = selectedBook["title"].toString();
         QString checkoutDate = QDate::currentDate().toString("dd-MM-yyyy");
 
         QDate dueDate = QDate::currentDate().addDays(10);
         isCheckedOut = true;
-        selectedBook["memberID"] = memberID;
+        currentBookMemberID = selectedUser["id"].toInt();
         selectedBook["isCheckOut"] = isCheckedOut;
 
-        QJsonObject checkedOutBook;
-        checkedOutBook["id"] = bookId;
-        checkedOutBook["checkoutDate"] = checkoutDate;
-
-        QJsonArray currentBooksArray = selectedUser["currentBooks"].toArray();
-        currentBooksArray.append(checkedOutBook);
-        selectedUser["currentBooks"] = currentBooksArray;
-
-        jsonUserDataArray.replace(selectedUserIndex, selectedUser);
-        jsonUserData["data"] = jsonUserDataArray;
-
-        if (!files.writeToJson(files.filePathMemberData, jsonUserData, 1) && !files.writeToJson(files.filePathBooks, selectedBook, 1)) {
-            qDebug() << "Failed to write to json file (Check Out)";
-        } else {
-            qDebug() << "check out saved";
+        //QJsonObject checkedOutBook;
+        //checkedOutBook["id"] = currentBookID;
+        //checkedOutBook["checkoutDate"] = checkoutDate;
 
 
-            QDate today = QDate::currentDate();
-            int daysUntilDue = today.daysTo(dueDate);
+        selectedUser["bookID"] = currentBookID;
+        selectedUser["checkoutDate"] = checkoutDate;
 
-            QString date = dueDate.toString();
-            QMessageBox::information(this, "Book checked Out", "The book with name of " + bookName + " has been checked out return by date of " + date);
 
-            if (daysUntilDue == 1) {
-                QMessageBox::information(this, "Book Due", "" + bookName + " is Due IN ONE day");
-            } else if (daysUntilDue <= 0) {
-                QMessageBox::warning(this, "Book Due", "" + bookName + " is Over-Due Please Return");
-            }
+
+        saveModifyedData(selectedUser,"");
+        saveModifyedData(QJsonObject(),checkoutDate);
+
+        qDebug() << "check out saved";
+
+
+        QDate today = QDate::currentDate();
+        int daysUntilDue = today.daysTo(dueDate);
+
+        QString date = dueDate.toString();
+        QMessageBox::information(this, "Book checked Out", "The book with name of " + bookName + " has been checked out return by date of " + date);
+
+        if (daysUntilDue == 1) {
+            QMessageBox::information(this, "Book Due", "" + bookName + " is Due IN ONE day");
+        } else if (daysUntilDue <= 0) {
+            QMessageBox::warning(this, "Book Due", "" + bookName + " is Over-Due Please Return");
         }
+
     } else {
         QMessageBox::warning(this, "Check out", "User or Book doesn't exist");
     }
@@ -209,38 +204,26 @@ void openBook::returnBook()
     QJsonArray jsonCurrentBookDataArray = jsonCurrentBookData.contains("data") ? jsonCurrentBookData["data"].toArray() : QJsonArray();
 
     int bookCount = jsonBookDataArray.size();
-    int currentUser = jsonCurrentUserDataArray.size();
+    int currentUserCounter = jsonCurrentUserDataArray.size();
 
-    int userIndex = -1;
-    int bookIndex = -1;
-    int bookMemberID = -1;
 
-    // Find the user index
-    for (int i = 0; i < currentUser; i++)
-    {
-        QJsonObject userObj = jsonCurrentUserDataArray[i].toObject();
-        int userID = userObj["id"].toInt();
-        if (userID == currentUser) {
-            userIndex = i;
-            break;
+
+
+
+    if (!jsonCurrentBookData.empty() && !jsonCurrentUserData.empty()) {
+
+        QJsonObject bookObj;
+
+        QJsonObject userObj;
+
+        for(int i = 0;i <currentUserCounter;i++)
+        {
+            userObj = jsonUserDataArray[i].toObject();
         }
-    }
-
-    // Find the book index
-    for (int i = 0; i < bookCount; i++)
-    {
-        QJsonObject bookObj = jsonBookDataArray[i].toObject();
-        if (bookObj["memberID"].toInt() == userIndex) {
-            bookIndex = i;
-            bookMemberID = bookObj["memberID"].toInt();
-            break; // Exit the loop after finding the matching book
+        for (int x = 0; x < bookCount; ++x) {
+            bookObj = jsonBookDataArray[x].toObject();
         }
-    }
 
-    if (userIndex != -1 && bookIndex != -1)
-    {
-        QJsonObject userObj = jsonUserDataArray[userIndex].toObject();
-        QJsonObject bookObj = jsonBookDataArray[bookIndex].toObject();
 
         bool isCheckedOut = bookObj["isCheckOut"].toBool();
         QString bookName = bookObj["title"].toString();
@@ -250,40 +233,28 @@ void openBook::returnBook()
         isReserved = false;
 
         // Update book information
-        bookObj["memberID"] = -1; // Reset member ID to indicate it's not checked out
-        bookObj["isCheckOut"] = isCheckedOut;
-        bookObj["isReserved"] = isReserved;
-        bookObj["checkoutDate"] = "";
-
-        // Remove the book from the user's currentBooks array
-        QJsonArray currentBooksArray = userObj["currentBooks"].toArray();
-        QJsonArray updatedCurrentBooksArray;
-
+        currentBookMemberID = -1;
+        checkoutDate = "";
+/*
         for (int i = 0; i < currentBooksArray.size(); i++)
         {
             QJsonObject bookDataObj = currentBooksArray[i].toObject();
-            if (bookDataObj["bookID"].toInt() != bookIndex)
+            if (bookDataObj["bookID"].toInt() != currentUserID)
             {
                 updatedCurrentBooksArray.append(bookDataObj);
             }
         }
-
-        userObj["currentBooks"] = updatedCurrentBooksArray;
-
-        jsonUserDataArray[userIndex] = userObj;
-
-        jsonUserData["data"] = jsonUserDataArray;
+*/
+        userObj["bookID"] = -1;
+        userObj["checkoutDate"] = checkoutDate;
 
         // Use the modifyJson function to update the JSON files
-        bool jsonModified = files.modifyJson(files.filePathMemberData, "data", jsonUserData["data"], 1);
-        if (!jsonModified)
-        {
-            qDebug() << "Failed to write to JSON file (Return Book)";
-        }
-        else
-        {
-            QMessageBox::information(this, "Book Returned", "The book with ID " + bookName + " has been returned.");
-        }
+
+        saveModifyedData(QJsonObject(),checkoutDate);
+        saveModifyedData(userObj,"");
+
+        QMessageBox::information(this, "Book Returned", "The book with ID " + bookName + " has been returned.");
+
     }
     else
     {
@@ -298,9 +269,6 @@ void openBook::checkIfBookIsCheckedOut()
     QJsonObject jsonCurrentUser = files.readFromJson(files.filePathCurrentUser);
     QJsonArray jsonCurrentUsersDataArray = jsonCurrentUser.contains("data") ? jsonCurrentUser["data"].toArray() : QJsonArray();
 
-    int memberID = -1;
-    int bookID = -1;
-    int bookMemberID = -1;
 
     canCheckOut = false;
     canReturn = false;
@@ -308,29 +276,20 @@ void openBook::checkIfBookIsCheckedOut()
 
     bool canSave = false;
 
-    for (int x = 0; x < jsonCurrentUsersDataArray.size(); ++x) {
-        QJsonObject objectUser = jsonCurrentUsersDataArray[x].toObject();
-        memberID = objectUser["id"].toInt();
-    }
 
     for (int i = 0; i < jsonBooksDataArray.size(); i++) {
         QJsonObject object = jsonBooksDataArray[i].toObject();
         isCheckedOut = object["isCheckOut"].toBool();
-        isReserved = object["isReserved"].toBool();
-        bookID = object["id"].toInt();
-        bookMemberID = object["memberID"].toInt();
+        isReserved = object["isReserved"].toBool();        
     }
 
-    if (!jsonCurrentUsersDataArray.empty() && !isCheckedOut) {
-        ui->pushButton_BookCheckOutReserve->setText("Check out");
-
+    if (!jsonCurrentUsersDataArray.empty() && !isCheckedOut) {        
         isCheckedOut = true;
         canCheckOut = true;
         canSave = true;
     }
 
-    if (!jsonCurrentUsersDataArray.empty() && !isReserved) {
-        ui->pushButton_BookCheckOutReserve->setText("Reserve");
+    if (!jsonCurrentUsersDataArray.empty() && !isReserved) {        
         isReserved = true;
         canRserve =true;
         canSave = true;
@@ -339,40 +298,63 @@ void openBook::checkIfBookIsCheckedOut()
 
     if(jsonCurrentUsersDataArray.empty())
     {
-        ui->pushButton_BookCheckOutReserve->setText("Locked");
         QMessageBox::warning(this, "guest user", "This is not a member account");
+        reject();
         return;
     }
 
 
-    if(!jsonCurrentUsersDataArray.empty() && memberID == bookMemberID)
+    if(!jsonCurrentUsersDataArray.empty() && currentUserID == currentBookMemberID)
     {
-        ui->pushButton_BookCheckOutReserve->setText("Return");
+
         canSave = true;
         canReturn =true;
         isCheckedOut = false;
         qDebug() << "currently Returning book";
     }
 
-    if(canSave)
-    {
-        files.modifyJson(files.filePathBooks, "memberID", memberID, bookID);
-        files.modifyJson(files.filePathBooks, "isCheckOut", isCheckedOut, bookID);
-        files.modifyJson(files.filePathBooks, "isReserved", isReserved, bookID);
-    }
+}
 
 
+void openBook::deleteCurrentBook()
+{
+    QJsonObject jsonBooks = files.readFromJson(files.filePathCurrentBook);
     // delete current book
 
-    int rowCount = jsonBooksDataArray.size();
-
     if (!jsonBooks.isEmpty()) {
-        for (int i = 0; i < rowCount; ++i) {
-            QJsonObject object = jsonBooksDataArray[i].toObject();
-            int id = object["id"].toInt();
-
-            files.deleteJsonElement(files.filePathCurrentBook, id);
-        }
+        files.deleteJsonElement(files.filePathCurrentBook, currentBookID);
     }
+}
 
+void openBook::saveModifyedData(QJsonObject object , QString checkoutDate)
+{
+
+
+
+    if(!files.modifyJson(files.filePathMemberData,"currentBooks",  currentUserID, object,QJsonValue()))
+    {
+        qDebug() << "unable to save to user file MemberData.json";
+        return;
+    }
+    if(!files.modifyJson(files.filePathBooks,"checkoutDate", currentBookID, QJsonObject(),checkoutDate))
+    {
+        qDebug() << "unable to save check out date to book file BooksData.json";
+        return;
+    }
+    if(!files.modifyJson(files.filePathBooks,"isCheckOut", currentBookID, QJsonObject(), isCheckedOut))
+    {
+        qDebug() << "unable to save isCheckOut to book file BooksData.json";
+        return;
+    }
+    if(!files.modifyJson(files.filePathBooks,"isReserved", currentBookID, QJsonObject(), isReserved))
+    {
+        qDebug() << "unable to save isReserved to book file BooksData.json";
+        return;
+    }
+    if(!files.modifyJson(files.filePathBooks,"memberID", currentBookID, QJsonObject(), currentBookMemberID))
+    {
+        qDebug() << "unable to save memberID to book file BooksData.json";
+        return;
+    }
+    qDebug() << "write to Json was secceful";
 }
