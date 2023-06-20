@@ -33,9 +33,11 @@ void openBook::on_pushButton_BookCheckOutReserve_clicked()
         accept();
         return;
     }
-    if(canRserve && currentBookMemberID != currentUserID)
+    if(canReserve && currentBookMemberID != currentUserID)
     {
-        canRserve = false;
+        reserveBook();
+        qDebug() << "can reserve";
+        canReserve = false;
         deleteCurrentBook();
         accept();
         return;
@@ -48,7 +50,7 @@ void openBook::on_pushButton_BookCheckOutReserve_clicked()
         accept();
         return;
     }
-
+    qDebug() << "failed all checks";
 
 }
 
@@ -81,14 +83,18 @@ void openBook::loadbook()
             QJsonObject currentUserObj = jsonCurrentUsersDataArray[x].toObject();
 
             currentUserID = currentUserObj["id"].toInt();
+            currentBookReturnDate = currentUserObj["checkoutDate"].toString();
         }
 
 
         isCheckedOut = object["isCheckOut"].toBool();
         isReserved = object["isReserved"].toBool();
 
+        currentReserveMemberID = object["reserveMemberID"].toInt();
         currentBookMemberID = object["memberID"].toInt();
         currentBookID = object["id"].toInt();
+
+
 
         ui->label_BookAuthor->setText("Author: " + object["author"].toString());
         ui->label_BookTitle->setText(object["title"].toString());
@@ -157,14 +163,9 @@ void openBook::checkBookOut()
         currentBookMemberID = selectedUser["id"].toInt();
         selectedBook["isCheckOut"] = isCheckedOut;
 
-        //QJsonObject checkedOutBook;
-        //checkedOutBook["id"] = currentBookID;
-        //checkedOutBook["checkoutDate"] = checkoutDate;
-
 
         selectedUser["bookID"] = currentBookID;
         selectedUser["checkoutDate"] = checkoutDate;
-
 
 
         saveModifyedData(selectedUser,"");
@@ -235,16 +236,7 @@ void openBook::returnBook()
         // Update book information
         currentBookMemberID = -1;
         checkoutDate = "";
-/*
-        for (int i = 0; i < currentBooksArray.size(); i++)
-        {
-            QJsonObject bookDataObj = currentBooksArray[i].toObject();
-            if (bookDataObj["bookID"].toInt() != currentUserID)
-            {
-                updatedCurrentBooksArray.append(bookDataObj);
-            }
-        }
-*/
+
         userObj["bookID"] = -1;
         userObj["checkoutDate"] = checkoutDate;
 
@@ -272,9 +264,7 @@ void openBook::checkIfBookIsCheckedOut()
 
     canCheckOut = false;
     canReturn = false;
-    canRserve = false;
-
-    bool canSave = false;
+    canReserve = false;
 
 
     for (int i = 0; i < jsonBooksDataArray.size(); i++) {
@@ -285,14 +275,12 @@ void openBook::checkIfBookIsCheckedOut()
 
     if (!jsonCurrentUsersDataArray.empty() && !isCheckedOut) {        
         isCheckedOut = true;
-        canCheckOut = true;
-        canSave = true;
+        canCheckOut = true;        
     }
 
-    if (!jsonCurrentUsersDataArray.empty() && !isReserved) {        
+    if (!jsonCurrentUsersDataArray.empty() && currentUserID != currentBookMemberID) {
         isReserved = true;
-        canRserve =true;
-        canSave = true;
+        canReserve =true;
     }
 
 
@@ -305,14 +293,19 @@ void openBook::checkIfBookIsCheckedOut()
 
 
     if(!jsonCurrentUsersDataArray.empty() && currentUserID == currentBookMemberID)
-    {
-
-        canSave = true;
+    {        
         canReturn =true;
         isCheckedOut = false;
         qDebug() << "currently Returning book";
     }
 
+}
+
+void openBook::reserveBook()
+{
+    QMessageBox::information(this, "Reserve book", "reserveing book can collect , " + currentBookReturnDate);
+
+    saveModifyedData(QJsonObject(), currentReserveMemberID);
 }
 
 
@@ -326,7 +319,7 @@ void openBook::deleteCurrentBook()
     }
 }
 
-void openBook::saveModifyedData(QJsonObject object , QString checkoutDate)
+void openBook::saveModifyedData(QJsonObject object , QJsonValue value)
 {
 
 
@@ -336,7 +329,7 @@ void openBook::saveModifyedData(QJsonObject object , QString checkoutDate)
         qDebug() << "unable to save to user file MemberData.json";
         return;
     }
-    if(!files.modifyJson(files.filePathBooks,"checkoutDate", currentBookID, QJsonObject(),checkoutDate))
+    if(!files.modifyJson(files.filePathBooks,"checkoutDate", currentBookID, QJsonObject(),currentBookReturnDate))
     {
         qDebug() << "unable to save check out date to book file BooksData.json";
         return;
@@ -354,6 +347,11 @@ void openBook::saveModifyedData(QJsonObject object , QString checkoutDate)
     if(!files.modifyJson(files.filePathBooks,"memberID", currentBookID, QJsonObject(), currentBookMemberID))
     {
         qDebug() << "unable to save memberID to book file BooksData.json";
+        return;
+    }
+    if(!files.modifyJson(files.filePathBooks,"reserveMemberID",  currentUserID, QJsonObject(), value))
+    {
+        qDebug() << "unable to save reserveMemberID to book file BooksData.json";
         return;
     }
     qDebug() << "write to Json was secceful";
