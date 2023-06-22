@@ -52,6 +52,6 @@ We chose Github for version control because it allows us to track and manage cha
 Success for this project will mean delivering a fully functional Library Information System that meets all the identified functional requirements, is easy to use for both library staff and members, and is delivered on time. We will also measure success by the feedback we receive from users and stakeholders.
 
 ## defult User
--user ID 1
--password Admin
+- user ID 1
+- password Admin
 
